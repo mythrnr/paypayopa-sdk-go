@@ -1,16 +1,21 @@
-.PHONY: lint test test-json tidy
+.PHONY: lint mock test test-json tidy
 .SILENT: test-json
 
-pkg ?= ./...
-
 lint:
-	golangci-lint run $(pkg)
+	golangci-lint run ./...
+
+mock:
+	mockery \
+		--case=underscore \
+		--inpackage \
+		--name=.* \
+		--output .
 
 test:
-	go test -cover $(pkg)
+	go test -cover ./...
 
 test-json:
-	go test -cover -json $(pkg)
+	go test -cover -json ./...
 
 tidy:
 	go mod tidy

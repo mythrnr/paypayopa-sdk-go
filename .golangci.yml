@@ -22,11 +22,16 @@ linters-settings:
     keywords:
       - "TODO"
       - "FIXME"
+  gosec:
+    excludes:
+      - "G401"
+      - "G404"
+      - "G501"
   ifshort:
     max-decl-lines: 1
     max-decl-chars: 60
   lll:
-    line-length: 80
+    line-length: 100
     tab-width: 4
   makezero:
     always: true
@@ -41,6 +46,10 @@ linters-settings:
 
 linters:
   disable:
+    - "exhaustivestruct"
+    - "gofumpt"
+    - "tagliatelle"
+    - "wrapcheck"
     # ---- deprecated ---- #
     - "golint"
     - "interfacer"
@@ -64,3 +73,6 @@ issues:
         - "dupl"
         - "errcheck"
         - "funlen"
+    - path: "example"
+      linters:
+        - "gomnd"
