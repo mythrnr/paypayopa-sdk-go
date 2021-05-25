@@ -11,14 +11,11 @@ func createAccountLinkQrCode(
 	client opaClient,
 	req *CreateAccountLinkQrCodePayload,
 ) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
-	timeout := 10
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 10 * time.Second
 
 	res := &CreateAccountLinkQrCodeResponse{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/qr/sessions",
 		res,
 		req,
@@ -36,14 +33,11 @@ func getMaskedUserProfile(
 	client opaClient,
 	userAuthorizationID string,
 ) (*MaskedUserProfileResponse, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &MaskedUserProfileResponse{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/user/profile/secure?"+url.Values{
 			"userAuthorizationId": []string{userAuthorizationID},
 		}.Encode(),
@@ -62,14 +56,11 @@ func getUserAuthorizationStatus(
 	client opaClient,
 	userAuthorizationID string,
 ) (*GetUserAuthorizationStatusResponse, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &GetUserAuthorizationStatusResponse{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/user/authorizations/"+userAuthorizationID,
 		res,
 	)
@@ -86,10 +77,10 @@ func unlinkUser(
 	client opaClient,
 	userAuthorizationID string,
 ) (*ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	const timeout = 15 * time.Second
 
-	defer cancel()
-
-	return client.DELETE(ctx, "/v2/user/authorizations/"+userAuthorizationID)
+	return client.DELETE(
+		ctxWithTimeout(ctx, timeout),
+		"/v2/user/authorizations/"+userAuthorizationID,
+	)
 }

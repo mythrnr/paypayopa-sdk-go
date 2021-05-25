@@ -16,6 +16,10 @@ func newAuthenticateInterceptor(
 	creds *Credential,
 	next http.RoundTripper,
 ) http.RoundTripper {
+	if creds == nil {
+		panic("*Credential must not be nil")
+	}
+
 	return &authInterceptor{creds: creds, next: next}
 }
 

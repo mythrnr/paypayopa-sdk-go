@@ -12,12 +12,12 @@ func cancelPayment(
 	client opaClient,
 	merchantPaymentID string,
 ) (*ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	const timeout = 15 * time.Second
 
-	defer cancel()
-
-	return client.DELETE(ctx, "/v2/payments/"+merchantPaymentID)
+	return client.DELETE(
+		ctxWithTimeout(ctx, timeout),
+		"/v2/payments/"+merchantPaymentID,
+	)
 }
 
 func cancelPendingOrder(
@@ -25,12 +25,12 @@ func cancelPendingOrder(
 	client opaClient,
 	merchantPaymentID string,
 ) (*ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	const timeout = 15 * time.Second
 
-	defer cancel()
-
-	return client.DELETE(ctx, "/v1/requestOrder/"+merchantPaymentID)
+	return client.DELETE(
+		ctxWithTimeout(ctx, timeout),
+		"/v1/requestOrder/"+merchantPaymentID,
+	)
 }
 
 func capturePaymentAuthorization(
@@ -38,14 +38,11 @@ func capturePaymentAuthorization(
 	client opaClient,
 	req *CapturePaymentAuthorizationPayload,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &Payment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/capture",
 		res,
 		req,
@@ -65,13 +62,10 @@ func consultExpectedCashbackInfo(
 	client opaClient,
 	req *ConsultExpectedCashbackInfoPayload,
 ) (*CashbackInfoResponse, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	rq, err := client.Request(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		http.MethodPost,
 		"/v1/payments/cashback/expected",
 		req,
@@ -100,15 +94,11 @@ func createQRCode(
 	client opaClient,
 	req *CreateQrCodePayload,
 ) (*QRCodeResponse, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &QRCodeResponse{}
-
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/codes",
 		res,
 		req,
@@ -126,14 +116,11 @@ func createContinuousPayment(
 	client opaClient,
 	req *CreateContinuousPaymentPayload,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &Payment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/subscription/payments",
 		res,
 		req,
@@ -151,14 +138,11 @@ func createPayment(
 	client opaClient,
 	req *CreatePaymentPayload,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &Payment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/payments?agreeSimilarTransaction="+
 			strconv.FormatBool(req.AgreeSimilarTransaction),
 		res,
@@ -177,14 +161,11 @@ func createPaymentAuthorization(
 	client opaClient,
 	req *CreatePaymentAuthorizationPayload,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &Payment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/preauthorize?agreeSimilarTransaction="+
 			strconv.FormatBool(req.AgreeSimilarTransaction),
 		res,
@@ -203,14 +184,11 @@ func createPendingPayment(
 	client opaClient,
 	req *CreatePendingPaymentPayload,
 ) (*PendingPayment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &PendingPayment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/requestOrder",
 		res,
 		req,
@@ -228,12 +206,12 @@ func deleteQRCode(
 	client opaClient,
 	codeID string,
 ) (*ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	const timeout = 15 * time.Second
 
-	defer cancel()
-
-	return client.DELETE(ctx, "/v2/codes/"+codeID)
+	return client.DELETE(
+		ctxWithTimeout(ctx, timeout),
+		"/v2/codes/"+codeID,
+	)
 }
 
 func getCodePaymentDetails(
@@ -241,14 +219,11 @@ func getCodePaymentDetails(
 	client opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &Payment{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/codes/payments/"+merchantPaymentID,
 		res,
 	)
@@ -265,14 +240,11 @@ func getPaymentDetails(
 	client opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &Payment{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/"+merchantPaymentID,
 		res,
 	)
@@ -289,14 +261,11 @@ func getRequestedPaymentDetails(
 	client opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &Payment{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/requestOrder/"+merchantPaymentID,
 		res,
 	)
@@ -313,14 +282,11 @@ func getRefundDetails(
 	client opaClient,
 	merchantRefundID string,
 ) (*Refund, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &Refund{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/refunds/"+merchantRefundID,
 		res,
 	)
@@ -337,14 +303,11 @@ func refundPayment(
 	client opaClient,
 	req *RefundPaymentPayload,
 ) (*Refund, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &Refund{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/refunds",
 		res,
 		req,
@@ -362,14 +325,11 @@ func revertPaymentAuthorization(
 	client opaClient,
 	req *RevertPaymentAuthorizationPayload,
 ) (*RevertedPayment, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &RevertedPayment{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/preauthorize/revert",
 		res,
 		req,

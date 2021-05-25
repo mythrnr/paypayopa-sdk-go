@@ -12,14 +12,11 @@ func checkUserWalletBalance(
 	client opaClient,
 	req *CheckUserWalletBalancePayload,
 ) (*CheckUserWalletBalance, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &CheckUserWalletBalance{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v2/wallet/check_balance?"+url.Values{
 			"userAuthorizationId": []string{req.UserAuthorizationID},
 			"amount": []string{
@@ -43,14 +40,11 @@ func createTopupQRCode(
 	client opaClient,
 	req *CreateTopupQRCodePayload,
 ) (*TopupQRCodeResponse, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &TopupQRCodeResponse{}
 	info, err := client.POST(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/code/topup",
 		res,
 		req,
@@ -68,12 +62,12 @@ func deleteTopupQRCode(
 	client opaClient,
 	codeID string,
 ) (*ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
+	const timeout = 30 * time.Second
 
-	defer cancel()
-
-	return client.DELETE(ctx, "/v1/code/topup/"+codeID)
+	return client.DELETE(
+		ctxWithTimeout(ctx, timeout),
+		"/v1/code/topup/"+codeID,
+	)
 }
 
 func getTopupDetails(
@@ -81,14 +75,11 @@ func getTopupDetails(
 	client opaClient,
 	merchantTopUpID string,
 ) (*TopupQRCodeDetailsResponse, *ResultInfo, error) {
-	timeout := 30
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 30 * time.Second
 
 	res := &TopupQRCodeDetailsResponse{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v1/code/topup/"+merchantTopUpID,
 		res,
 	)
@@ -105,14 +96,11 @@ func getUserWalletBalance(
 	client opaClient,
 	req *GetUserWalletBalancePayload,
 ) (*UserWalletBalanceResponse, *ResultInfo, error) {
-	timeout := 15
-	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
-
-	defer cancel()
+	const timeout = 15 * time.Second
 
 	res := &UserWalletBalanceResponse{}
 	info, err := client.GET(
-		ctx,
+		ctxWithTimeout(ctx, timeout),
 		"/v6/wallet/balance?"+url.Values{
 			"userAuthorizationId": []string{req.UserAuthorizationID},
 			"currency":            []string{string(req.Currency)},

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -19,6 +20,20 @@ import (
 // 30s 以上に設定することが推奨されている為, 倍を設定.
 // 通常, これ以上待機してもレスポンスは期待できない.
 const timeout = 60 * time.Second
+
+type ctxkeyTimeout struct{}
+
+func ctxWithTimeout(ctx context.Context, d time.Duration) context.Context {
+	return context.WithValue(ctx, &ctxkeyTimeout{}, d)
+}
+
+func getTimeout(ctx context.Context) time.Duration {
+	if d, ok := ctx.Value(&ctxkeyTimeout{}).(time.Duration); ok {
+		return d
+	}
+
+	return timeout
+}
 
 // opaClient is the interface definition for
 // handling requests/responses to the PayPay API.
@@ -68,15 +83,19 @@ type opaClient interface {
 	Do(req *http.Request, res interface{}) (*ResultInfo, error)
 }
 
-type client struct{ http *http.Client }
+type clientImpl struct{ http *http.Client }
 
-var _ opaClient = (*client)(nil)
+var _ opaClient = (*clientImpl)(nil)
 
 func newClient(creds *Credential) opaClient {
 	return newClientWithHTTPClient(creds, &http.Client{})
 }
 
 func newClientWithHTTPClient(creds *Credential, hc *http.Client) opaClient {
+	if hc == nil {
+		panic("*http.Client must not be nil")
+	}
+
 	if hc.Timeout == 0 {
 		hc.Timeout = timeout
 	}
@@ -88,10 +107,10 @@ func newClientWithHTTPClient(creds *Credential, hc *http.Client) opaClient {
 
 	hc.Transport = newAuthenticateInterceptor(creds, tr)
 
-	return &client{http: hc}
+	return &clientImpl{http: hc}
 }
 
-func (c *client) GET(
+func (c *clientImpl) GET(
 	ctx context.Context,
 	path string,
 	res interface{},
@@ -104,7 +123,7 @@ func (c *client) GET(
 	return c.Do(req, res)
 }
 
-func (c *client) DELETE(
+func (c *clientImpl) DELETE(
 	ctx context.Context,
 	path string,
 ) (*ResultInfo, error) {
@@ -116,7 +135,7 @@ func (c *client) DELETE(
 	return c.Do(req, nil)
 }
 
-func (c *client) POST(
+func (c *clientImpl) POST(
 	ctx context.Context,
 	path string,
 	res interface{},
@@ -130,7 +149,7 @@ func (c *client) POST(
 	return c.Do(rq, res)
 }
 
-func (c *client) Request(
+func (c *clientImpl) Request(
 	ctx context.Context,
 	method, path string,
 	req interface{},
@@ -154,16 +173,29 @@ func (c *client) Request(
 	return rq, nil
 }
 
-func (c *client) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
+func (c *clientImpl) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
+	ctx, cancel := context.WithTimeout(
+		req.Context(),
+		getTimeout(req.Context()),
+	)
+
+	req = req.WithContext(ctx)
+
 	defer func() {
+		cancel()
+
 		if req.Body != nil {
 			req.Body.Close()
 		}
 	}()
 
 	rs, err := c.http.Do(req)
+	if errors.Is(err, context.DeadlineExceeded) {
+		return nil, fmt.Errorf("request timeout: %w", err)
+	}
+
 	if err != nil {
-		return nil, fmt.Errorf("failed to send request: %w", err)
+		return nil, fmt.Errorf("an error occurred during request: %w", err)
 	}
 
 	defer rs.Body.Close()
@@ -187,7 +219,7 @@ func (c *client) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
 	}
 
 	if err := json.Unmarshal(body.Data, res); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal response body: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal response.data: %w", err)
 	}
 
 	return info, nil

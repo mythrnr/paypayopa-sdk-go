@@ -11,6 +11,24 @@ mock:
 		--name=.* \
 		--output .
 
+	mockery \
+		--case=underscore \
+		--dir=$(shell go env GOROOT)/src/net/http \
+		--name=RoundTripper \
+		--output=internal/mocks
+
+	mockery \
+		--case=underscore \
+		--dir=$(shell go env GOROOT)/src/io \
+		--name=ReadCloser \
+		--output=internal/mocks
+
+	mockery \
+		--case=underscore \
+		--dir=$(shell go env GOROOT)/src/encoding/json \
+		--name=Marshaler \
+		--output=internal/mocks
+
 test:
 	go test -cover ./...
 
