@@ -100,7 +100,7 @@ func (r *RequestMoney) CancelPendingOrder(
 func (r *RequestMoney) RefundPayment(
 	ctx context.Context,
 	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return refundPayment(ctx, r.client, req)
 }
 
@@ -116,7 +116,7 @@ func (r *RequestMoney) RefundPayment(
 func (r *RequestMoney) GetRefundDetails(
 	ctx context.Context,
 	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return getRefundDetails(ctx, r.client, merchantRefundID)
 }
 
@@ -149,6 +149,6 @@ func (r *RequestMoney) CreateAccountLinkQRCode(
 func (r *RequestMoney) GetMaskedUserProfile(
 	ctx context.Context,
 	userAuthorizationID string,
-) (*MaskedUserProfileResponse, *ResultInfo, error) {
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, r.client, userAuthorizationID)
 }

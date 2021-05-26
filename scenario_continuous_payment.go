@@ -101,7 +101,7 @@ func (c *ContinuousPayment) CancelPayment(
 func (c *ContinuousPayment) RefundPayment(
 	ctx context.Context,
 	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return refundPayment(ctx, c.client, req)
 }
 
@@ -117,7 +117,7 @@ func (c *ContinuousPayment) RefundPayment(
 func (c *ContinuousPayment) GetRefundDetails(
 	ctx context.Context,
 	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return getRefundDetails(ctx, c.client, merchantRefundID)
 }
 
@@ -183,6 +183,6 @@ func (c *ContinuousPayment) GetUserAuthorizationStatus(
 func (c *ContinuousPayment) GetMaskedUserProfile(
 	ctx context.Context,
 	userAuthorizationID string,
-) (*MaskedUserProfileResponse, *ResultInfo, error) {
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, c.client, userAuthorizationID)
 }

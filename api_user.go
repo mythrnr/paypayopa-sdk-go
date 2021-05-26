@@ -2,9 +2,25 @@ package paypayopa
 
 import (
 	"context"
+	"encoding/json"
 	"net/url"
 	"time"
 )
+
+type CreateAccountLinkQrCodePayload struct {
+	Scopes       []Scope `json:"scopes"`
+	Nonce        string  `json:"nonce"`
+	RedirectType string  `json:"redirectType"`
+	RedirectURL  string  `json:"redirectUrl"`
+	ReferenceID  string  `json:"referenceId"`
+	PhoneNumber  string  `json:"phoneNumber"`
+	DeviceID     string  `json:"deviceId"`
+	UserAgent    string  `json:"userAgent"`
+}
+
+type CreateAccountLinkQrCodeResponse struct {
+	LinkQRCodeURL string `json:"linkQRCodeURL"`
+}
 
 func createAccountLinkQrCode(
 	ctx context.Context,
@@ -28,14 +44,18 @@ func createAccountLinkQrCode(
 	return res, info, nil
 }
 
+type GetMaskedUserProfileResponse struct {
+	PhoneNumber string `json:"phoneNumber"`
+}
+
 func getMaskedUserProfile(
 	ctx context.Context,
 	client *opaClient,
 	userAuthorizationID string,
-) (*MaskedUserProfileResponse, *ResultInfo, error) {
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &MaskedUserProfileResponse{}
+	res := &GetMaskedUserProfileResponse{}
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/user/profile/secure?"+url.Values{
@@ -49,6 +69,15 @@ func getMaskedUserProfile(
 	}
 
 	return res, info, nil
+}
+
+type GetUserAuthorizationStatusResponse struct {
+	UserAuthorizationID string           `json:"userAuthorizationId"`
+	ReferenceIDs        *json.RawMessage `json:"referenceIds"`
+	Status              string           `json:"status"`
+	Scopes              []string         `json:"scopes"`
+	ExpireAt            int64            `json:"expireAt"`
+	IssuedAt            int64            `json:"issuedAt"`
 }
 
 func getUserAuthorizationStatus(

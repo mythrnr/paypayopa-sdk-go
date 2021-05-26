@@ -137,7 +137,7 @@ func (p *PreAuthCapture) CapturePaymentAuthorization(
 func (p *PreAuthCapture) RevertPaymentAuthorization(
 	ctx context.Context,
 	req *RevertPaymentAuthorizationPayload,
-) (*RevertedPayment, *ResultInfo, error) {
+) (*RevertedPaymentResponse, *ResultInfo, error) {
 	return revertPaymentAuthorization(ctx, p.client, req)
 }
 
@@ -153,7 +153,7 @@ func (p *PreAuthCapture) RevertPaymentAuthorization(
 func (p *PreAuthCapture) RefundPayment(
 	ctx context.Context,
 	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return refundPayment(ctx, p.client, req)
 }
 
@@ -169,7 +169,7 @@ func (p *PreAuthCapture) RefundPayment(
 func (p *PreAuthCapture) GetRefundDetails(
 	ctx context.Context,
 	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return getRefundDetails(ctx, p.client, merchantRefundID)
 }
 
@@ -315,6 +315,6 @@ func (p *PreAuthCapture) GetUserAuthorizationStatus(
 func (p *PreAuthCapture) GetMaskedUserProfile(
 	ctx context.Context,
 	userAuthorizationID string,
-) (*MaskedUserProfileResponse, *ResultInfo, error) {
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, p.client, userAuthorizationID)
 }

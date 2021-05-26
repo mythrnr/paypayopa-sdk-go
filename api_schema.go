@@ -62,6 +62,30 @@ type MoneyAmount struct {
 	Currency Currency `json:"currency"`
 }
 
+type Payment struct {
+	PaymentID  string `json:"paymentId"`
+	Status     string `json:"status"`
+	AcceptedAt int64  `json:"acceptedAt"`
+	Refunds    struct {
+		Data []*RefundResponse `json:"data"`
+	} `json:"refunds"`
+	Captures struct {
+		Data []*Capture `json:"data"`
+	} `json:"captures"`
+	Revert             *Revert              `json:"revert"`
+	MerchantPaymentID  string               `json:"merchantPaymentId"`
+	Amount             *MoneyAmount         `json:"amount"`
+	RequestedAt        int64                `json:"requestedAt"`
+	ExpiresAt          *int64               `json:"expiresAt"`
+	CanceledAt         *int64               `json:"canceledAt"`
+	StoreID            string               `json:"storeId"`
+	TerminalID         string               `json:"terminalId"`
+	OrderReceiptNumber string               `json:"orderReceiptNumber"`
+	OrderDescription   string               `json:"orderDescription"`
+	OrderItems         []*MerchantOrderItem `json:"orderItems"`
+	Metadata           *json.RawMessage     `json:"metadata"`
+}
+
 type Revert struct {
 	AcceptedAt       int64  `json:"acceptedAt"`
 	MerchantRevertID string `json:"merchantRevertId"`

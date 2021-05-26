@@ -116,7 +116,7 @@ func (n *NativePayment) CancelPayment(
 func (n *NativePayment) RefundPayment(
 	ctx context.Context,
 	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return refundPayment(ctx, n.client, req)
 }
 
@@ -132,7 +132,7 @@ func (n *NativePayment) RefundPayment(
 func (n *NativePayment) GetRefundDetails(
 	ctx context.Context,
 	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return getRefundDetails(ctx, n.client, merchantRefundID)
 }
 
@@ -278,6 +278,6 @@ func (n *NativePayment) GetUserAuthorizationStatus(
 func (n *NativePayment) GetMaskedUserProfile(
 	ctx context.Context,
 	userAuthorizationID string,
-) (*MaskedUserProfileResponse, *ResultInfo, error) {
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, n.client, userAuthorizationID)
 }

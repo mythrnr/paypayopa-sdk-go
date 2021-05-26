@@ -2,10 +2,50 @@ package paypayopa
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"strconv"
 	"time"
 )
+
+type CreatePaymentPayload struct {
+	MerchantPaymentID   string               `json:"merchantPaymentId"`
+	UserAuthorizationID string               `json:"userAuthorizationId"`
+	Amount              *MoneyAmount         `json:"amount"`
+	RequestedAt         int64                `json:"requestedAt"`
+	StoreID             string               `json:"storeId"`
+	TerminalID          string               `json:"terminalId"`
+	OrderReceiptNumber  string               `json:"orderReceiptNumber"`
+	OrderDescription    string               `json:"orderDescription"`
+	OrderItems          []*MerchantOrderItem `json:"orderItems"`
+	Metadata            *json.RawMessage     `json:"metadata"`
+	ProductType         string               `json:"productType"`
+
+	AgreeSimilarTransaction bool `json:"-"`
+}
+
+func createPayment(
+	ctx context.Context,
+	client *opaClient,
+	req *CreatePaymentPayload,
+) (*Payment, *ResultInfo, error) {
+	const timeout = 30 * time.Second
+
+	res := &Payment{}
+	info, err := client.POST(
+		ctxWithTimeout(ctx, timeout),
+		"/v2/payments?agreeSimilarTransaction="+
+			strconv.FormatBool(req.AgreeSimilarTransaction),
+		res,
+		req,
+	)
+
+	if err != nil || !info.Success() {
+		return nil, info, err
+	}
+
+	return res, info, nil
+}
 
 func cancelPayment(
 	ctx context.Context,
@@ -20,17 +60,33 @@ func cancelPayment(
 	)
 }
 
-func cancelPendingOrder(
+func getPaymentDetails(
 	ctx context.Context,
 	client *opaClient,
 	merchantPaymentID string,
-) (*ResultInfo, error) {
+) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	return client.DELETE(
+	res := &Payment{}
+	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
-		"/v1/requestOrder/"+merchantPaymentID,
+		"/v2/payments/"+merchantPaymentID,
+		res,
 	)
+
+	if err != nil || !info.Success() {
+		return nil, info, err
+	}
+
+	return res, info, nil
+}
+
+type CapturePaymentAuthorizationPayload struct {
+	MerchantPaymentID string       `json:"merchantPaymentId"`
+	Amount            *MoneyAmount `json:"amount"`
+	MerchantCaptureID string       `json:"merchantCaptureId"`
+	RequestedAt       int64        `json:"requestedAt"`
+	OrderDescription  string       `json:"orderDescription"`
 }
 
 func capturePaymentAuthorization(
@@ -55,6 +111,23 @@ func capturePaymentAuthorization(
 	}
 
 	return res, info, nil
+}
+
+type ConsultExpectedCashbackInfoPayload struct {
+	RequestID           string               `json:"requestId"`
+	MerchantPaymentID   string               `json:"merchantPaymentId"`
+	UserAuthorizationID string               `json:"userAuthorizationId"`
+	Amount              *MoneyAmount         `json:"amount"`
+	RequestedAt         int64                `json:"requestedAt"`
+	StoreID             string               `json:"storeId"`
+	OrderItems          []*MerchantOrderItem `json:"orderItems"`
+	ProductType         string               `json:"productType"`
+
+	Lang Lang `json:"-"`
+}
+
+type CashbackInfoResponse struct {
+	Campaignmessage string `json:"campaignMessage"`
 }
 
 func consultExpectedCashbackInfo(
@@ -89,26 +162,17 @@ func consultExpectedCashbackInfo(
 	return res, info, nil
 }
 
-func createQRCode(
-	ctx context.Context,
-	client *opaClient,
-	req *CreateQrCodePayload,
-) (*QRCodeResponse, *ResultInfo, error) {
-	const timeout = 30 * time.Second
-
-	res := &QRCodeResponse{}
-	info, err := client.POST(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/codes",
-		res,
-		req,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
+type CreateContinuousPaymentPayload struct {
+	MerchantPaymentID   string               `json:"merchantPaymentId"`
+	UserAuthorizationID string               `json:"userAuthorizationId"`
+	Amount              *MoneyAmount         `json:"amount"`
+	RequestedAt         int64                `json:"requestedAt"`
+	StoreID             string               `json:"storeId"`
+	TerminalID          string               `json:"terminalId"`
+	OrderReceiptNumber  string               `json:"orderReceiptNumber"`
+	OrderDescription    string               `json:"orderDescription"`
+	OrderItems          []*MerchantOrderItem `json:"orderItems"`
+	Metadata            *json.RawMessage     `json:"metadata"`
 }
 
 func createContinuousPayment(
@@ -133,27 +197,20 @@ func createContinuousPayment(
 	return res, info, nil
 }
 
-func createPayment(
-	ctx context.Context,
-	client *opaClient,
-	req *CreatePaymentPayload,
-) (*Payment, *ResultInfo, error) {
-	const timeout = 30 * time.Second
+type CreatePaymentAuthorizationPayload struct {
+	MerchantPaymentID   string               `json:"merchantPaymentId"`
+	UserAuthorizationID string               `json:"userAuthorizationId"`
+	Amount              *MoneyAmount         `json:"amount"`
+	RequestedAt         int64                `json:"requestedAt"`
+	ExpiresAt           int64                `json:"expiresAt"`
+	StoreID             string               `json:"storeId"`
+	TerminalID          string               `json:"terminalId"`
+	OrderReceiptNumber  string               `json:"orderReceiptNumber"`
+	OrderDescription    string               `json:"orderDescription"`
+	OrderItems          []*MerchantOrderItem `json:"orderItems"`
+	Metadata            *json.RawMessage     `json:"metadata"`
 
-	res := &Payment{}
-	info, err := client.POST(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/payments?agreeSimilarTransaction="+
-			strconv.FormatBool(req.AgreeSimilarTransaction),
-		res,
-		req,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
+	AgreeSimilarTransaction bool `json:"-"`
 }
 
 func createPaymentAuthorization(
@@ -179,155 +236,29 @@ func createPaymentAuthorization(
 	return res, info, nil
 }
 
-func createPendingPayment(
-	ctx context.Context,
-	client *opaClient,
-	req *CreatePendingPaymentPayload,
-) (*PendingPayment, *ResultInfo, error) {
-	const timeout = 30 * time.Second
-
-	res := &PendingPayment{}
-	info, err := client.POST(
-		ctxWithTimeout(ctx, timeout),
-		"/v1/requestOrder",
-		res,
-		req,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
+type RevertPaymentAuthorizationPayload struct {
+	MerchantRevertID string `json:"merchantRevertId"`
+	PaymentID        string `json:"paymentId"`
+	RequestedAt      int64  `json:"requestedAt"`
+	Reason           string `json:"reason"`
 }
 
-func deleteQRCode(
-	ctx context.Context,
-	client *opaClient,
-	codeID string,
-) (*ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	return client.DELETE(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/codes/"+codeID,
-	)
-}
-
-func getCodePaymentDetails(
-	ctx context.Context,
-	client *opaClient,
-	merchantPaymentID string,
-) (*Payment, *ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	res := &Payment{}
-	info, err := client.GET(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/codes/payments/"+merchantPaymentID,
-		res,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
-}
-
-func getPaymentDetails(
-	ctx context.Context,
-	client *opaClient,
-	merchantPaymentID string,
-) (*Payment, *ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	res := &Payment{}
-	info, err := client.GET(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/payments/"+merchantPaymentID,
-		res,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
-}
-
-func getRequestedPaymentDetails(
-	ctx context.Context,
-	client *opaClient,
-	merchantPaymentID string,
-) (*Payment, *ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	res := &Payment{}
-	info, err := client.GET(
-		ctxWithTimeout(ctx, timeout),
-		"/v1/requestOrder/"+merchantPaymentID,
-		res,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
-}
-
-func getRefundDetails(
-	ctx context.Context,
-	client *opaClient,
-	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	res := &Refund{}
-	info, err := client.GET(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/refunds/"+merchantRefundID,
-		res,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
-}
-
-func refundPayment(
-	ctx context.Context,
-	client *opaClient,
-	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
-	const timeout = 30 * time.Second
-
-	res := &Refund{}
-	info, err := client.POST(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/refunds",
-		res,
-		req,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
+type RevertedPaymentResponse struct {
+	Status      string `json:"status"`
+	AcceptedAt  int64  `json:"acceptedAt"`
+	PaymentID   string `json:"paymentId"`
+	RequestedAt int64  `json:"requestedAt"`
+	Reason      string `json:"reason"`
 }
 
 func revertPaymentAuthorization(
 	ctx context.Context,
 	client *opaClient,
 	req *RevertPaymentAuthorizationPayload,
-) (*RevertedPayment, *ResultInfo, error) {
+) (*RevertedPaymentResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &RevertedPayment{}
+	res := &RevertedPaymentResponse{}
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/preauthorize/revert",

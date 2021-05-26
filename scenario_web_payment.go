@@ -134,7 +134,7 @@ func (w *WebPayment) CapturePaymentAuthorization(
 func (w *WebPayment) RevertPaymentAuthorization(
 	ctx context.Context,
 	req *RevertPaymentAuthorizationPayload,
-) (*RevertedPayment, *ResultInfo, error) {
+) (*RevertedPaymentResponse, *ResultInfo, error) {
 	return revertPaymentAuthorization(ctx, w.client, req)
 }
 
@@ -150,7 +150,7 @@ func (w *WebPayment) RevertPaymentAuthorization(
 func (w *WebPayment) RefundPayment(
 	ctx context.Context,
 	req *RefundPaymentPayload,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return refundPayment(ctx, w.client, req)
 }
 
@@ -166,6 +166,6 @@ func (w *WebPayment) RefundPayment(
 func (w *WebPayment) GetRefundDetails(
 	ctx context.Context,
 	merchantRefundID string,
-) (*Refund, *ResultInfo, error) {
+) (*RefundResponse, *ResultInfo, error) {
 	return getRefundDetails(ctx, w.client, merchantRefundID)
 }

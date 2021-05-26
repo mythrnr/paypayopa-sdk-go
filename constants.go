@@ -1,6 +1,84 @@
 package paypayopa
 
-import "encoding/json"
+// CodeType is the code type required for QR Code creation requests.
+//
+// CodeType は QR コード作成リクエストに必要なコード種別.
+type CodeType string
+
+const (
+	// CodeTypeOrderQR is a fixed value that needs to be entered
+	// when sending a QR Code creation request.
+	//
+	// CodeTypeOrderQR は QR コード作成リクエストを送信するときに入力が必要な固定値.
+	CodeTypeOrderQR CodeType = "ORDER_QR"
+
+	// CodeTypeTopupQR is a fixed value that needs to be entered
+	// when sending a request to create a QR code for top-up.
+	//
+	// CodeTypeTopupQR はトップアップ用の QR コード作成リクエストを
+	// 送信するときに入力が必要な固定値.
+	CodeTypeTopupQR CodeType = "TOPUP_QR"
+)
+
+// Currency is the type of currency.
+//
+// Currency は通貨の種別.
+type Currency string
+
+// CurrencyJPY is the currency unit for the Japanese yen.
+//
+// CurrencyJPY は日本円を表す通貨単位.
+const CurrencyJPY Currency = "JPY"
+
+// Lang is a value specified in the lang header to set
+// the language of the cashback message text.
+//
+// Lang はキャッシュバックメッセージテキストの言語を設定するために
+// lang ヘッダに指定する値.
+type Lang string
+
+const (
+	// LangEN is a value to set the language of
+	// the cashback message text to English.
+	//
+	// LangEN はキャッシュバックメッセージテキストの言語の設定を英語にするための値.
+	LangEN = "EN"
+
+	// LangJA is a value to set the language of
+	// the cashback message text to Japanese.
+	// It is the default value and need not be specified.
+	//
+	// LangJA はキャッシュバックメッセージテキストの言語の設定を日本語にするための値.
+	// デフォルト値の為, 指定する必要は無い.
+	LangJA = "JA"
+
+	// headerNameLang is the name of the language header
+	// to set to specify the language of the response.
+	//
+	// headerNameLang はレスポンスの言語を指定する為にセットする言語ヘッダの名前.
+	headerNameLang = "lang"
+)
+
+// RedirectType is the type of redirection to specify
+// when sending a QR Code creation request.
+//
+// RedirectType は QR コード作成リクエストを
+// 送信するときに指定するリダイレクトの種別.
+type RedirectType string
+
+const (
+	// RedirectTypeWebLink is specified when the payment is occurring
+	// in a web browser.
+	//
+	// RedirectTypeWebLink は支払いがウェブブラウザで発生しているときに指定する.
+	RedirectTypeWebLink RedirectType = "WEB_LINK"
+
+	// RedirectTypeDeepLink is specified when the payment is occurring
+	// in the app.
+	//
+	// RedirectTypeDeepLink は支払いがアプリで発生しているときに指定する.
+	RedirectTypeDeepLink RedirectType = "APP_DEEP_LINK"
+)
 
 // Scope is the scope of the user authorization.
 //
@@ -8,7 +86,6 @@ import "encoding/json"
 type Scope string
 
 const (
-
 	// ScopeDirectDebit represents the scope direct_debit
 	// of the user authorization.
 	//
@@ -118,31 +195,3 @@ const (
 	// bank_registration を表す.
 	ScopeBankRegistration Scope = "bank_registration"
 )
-
-type CreateAccountLinkQrCodePayload struct {
-	Scopes       []Scope `json:"scopes"`
-	Nonce        string  `json:"nonce"`
-	RedirectType string  `json:"redirectType"`
-	RedirectURL  string  `json:"redirectUrl"`
-	ReferenceID  string  `json:"referenceId"`
-	PhoneNumber  string  `json:"phoneNumber"`
-	DeviceID     string  `json:"deviceId"`
-	UserAgent    string  `json:"userAgent"`
-}
-
-type GetUserAuthorizationStatusResponse struct {
-	UserAuthorizationID string           `json:"userAuthorizationId"`
-	ReferenceIDs        *json.RawMessage `json:"referenceIds"`
-	Status              string           `json:"status"`
-	Scopes              []string         `json:"scopes"`
-	ExpireAt            int64            `json:"expireAt"`
-	IssuedAt            int64            `json:"issuedAt"`
-}
-
-type MaskedUserProfileResponse struct {
-	PhoneNumber string `json:"phoneNumber"`
-}
-
-type CreateAccountLinkQrCodeResponse struct {
-	LinkQRCodeURL string `json:"linkQRCodeURL"`
-}
