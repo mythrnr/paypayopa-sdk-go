@@ -9,7 +9,7 @@ import (
 
 func checkUserWalletBalance(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CheckUserWalletBalancePayload,
 ) (*CheckUserWalletBalance, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -37,7 +37,7 @@ func checkUserWalletBalance(
 
 func createTopupQRCode(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreateTopupQRCodePayload,
 ) (*TopupQRCodeResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -59,7 +59,7 @@ func createTopupQRCode(
 
 func deleteTopupQRCode(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	codeID string,
 ) (*ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -72,7 +72,7 @@ func deleteTopupQRCode(
 
 func getTopupDetails(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantTopUpID string,
 ) (*TopupQRCodeDetailsResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -93,7 +93,7 @@ func getTopupDetails(
 
 func getUserWalletBalance(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *GetUserWalletBalancePayload,
 ) (*UserWalletBalanceResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second

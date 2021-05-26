@@ -9,7 +9,7 @@ import (
 
 func cancelPayment(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantPaymentID string,
 ) (*ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -22,7 +22,7 @@ func cancelPayment(
 
 func cancelPendingOrder(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantPaymentID string,
 ) (*ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -35,7 +35,7 @@ func cancelPendingOrder(
 
 func capturePaymentAuthorization(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CapturePaymentAuthorizationPayload,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -59,7 +59,7 @@ func capturePaymentAuthorization(
 
 func consultExpectedCashbackInfo(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *ConsultExpectedCashbackInfoPayload,
 ) (*CashbackInfoResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -91,7 +91,7 @@ func consultExpectedCashbackInfo(
 
 func createQRCode(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreateQrCodePayload,
 ) (*QRCodeResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -113,7 +113,7 @@ func createQRCode(
 
 func createContinuousPayment(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreateContinuousPaymentPayload,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -135,7 +135,7 @@ func createContinuousPayment(
 
 func createPayment(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreatePaymentPayload,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -158,7 +158,7 @@ func createPayment(
 
 func createPaymentAuthorization(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreatePaymentAuthorizationPayload,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -181,7 +181,7 @@ func createPaymentAuthorization(
 
 func createPendingPayment(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreatePendingPaymentPayload,
 ) (*PendingPayment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -203,7 +203,7 @@ func createPendingPayment(
 
 func deleteQRCode(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	codeID string,
 ) (*ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -216,7 +216,7 @@ func deleteQRCode(
 
 func getCodePaymentDetails(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -237,7 +237,7 @@ func getCodePaymentDetails(
 
 func getPaymentDetails(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -258,7 +258,7 @@ func getPaymentDetails(
 
 func getRequestedPaymentDetails(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantPaymentID string,
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -279,7 +279,7 @@ func getRequestedPaymentDetails(
 
 func getRefundDetails(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	merchantRefundID string,
 ) (*Refund, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -300,7 +300,7 @@ func getRefundDetails(
 
 func refundPayment(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *RefundPaymentPayload,
 ) (*Refund, *ResultInfo, error) {
 	const timeout = 30 * time.Second
@@ -322,7 +322,7 @@ func refundPayment(
 
 func revertPaymentAuthorization(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *RevertPaymentAuthorizationPayload,
 ) (*RevertedPayment, *ResultInfo, error) {
 	const timeout = 30 * time.Second

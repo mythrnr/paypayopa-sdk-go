@@ -8,7 +8,7 @@ import (
 
 func createAccountLinkQrCode(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	req *CreateAccountLinkQrCodePayload,
 ) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
 	const timeout = 10 * time.Second
@@ -30,7 +30,7 @@ func createAccountLinkQrCode(
 
 func getMaskedUserProfile(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	userAuthorizationID string,
 ) (*MaskedUserProfileResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -53,7 +53,7 @@ func getMaskedUserProfile(
 
 func getUserAuthorizationStatus(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	userAuthorizationID string,
 ) (*GetUserAuthorizationStatusResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
@@ -74,7 +74,7 @@ func getUserAuthorizationStatus(
 
 func unlinkUser(
 	ctx context.Context,
-	client opaClient,
+	client *opaClient,
 	userAuthorizationID string,
 ) (*ResultInfo, error) {
 	const timeout = 15 * time.Second

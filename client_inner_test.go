@@ -76,7 +76,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 			&http.Client{},
 		)
 
-		assert.Equal(t, timeout, client.(*clientImpl).http.Timeout)
+		assert.Equal(t, timeout, client.http.Timeout)
 	})
 
 	assert.PanicsWithValue(t, "*http.Client must not be nil", func() {

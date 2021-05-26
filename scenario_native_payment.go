@@ -18,7 +18,7 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/direct_debit
-type NativePayment struct{ client opaClient }
+type NativePayment struct{ client *opaClient }
 
 // NewNativePayment returns a client for Native Payment.
 //

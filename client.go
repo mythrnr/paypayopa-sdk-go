@@ -35,63 +35,16 @@ func getTimeout(ctx context.Context) time.Duration {
 	return timeout
 }
 
-// opaClient is the interface definition for
-// handling requests/responses to the PayPay API.
+// opaClient is the client for handling requests/responses to the PayPay API.
 //
-// opaClient は PayPay API へのリクエスト/レスポンスの
-// ハンドリングを行うインターフェース定義.
-type opaClient interface {
-	// GET sends a GET request.
-	// response is stored in res, and returns
-	// the processing result and error object.
-	//
-	// GET は GET リクエストを送信する.
-	// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
-	GET(ctx context.Context, path string, res interface{}) (*ResultInfo, error)
+// opaClient は PayPay API へのリクエスト/レスポンスのハンドリングを行うクライアント.
+type opaClient struct{ http *http.Client }
 
-	// DELETE sends a DELETE request, and returns
-	// the processing result and error object.
-	//
-	// DELETE は DELETE リクエストを送信し, 処理結果とエラーオブジェクトを返す.
-	DELETE(ctx context.Context, path string) (*ResultInfo, error)
-
-	// POST sends a POST request.
-	// response is stored in res, and returns
-	// the processing result and error object.
-	//
-	// POST は POST リクエストを送信する.
-	// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
-	POST(ctx context.Context, path string, res interface{}, req interface{}) (*ResultInfo, error)
-
-	// Request creates a *http.Request from arguments.
-	// Basically, you can simply execute the GET, DELETE, and POST methods,
-	// but if you want to configure the request further, call this method.
-	// The configured request is sent by calling the Do method.
-	//
-	// Requestは、引数から*http.Requestを作成する.
-	// 基本的には単純に GET, DELETE, POST のメソッドを実行すればいいが,
-	// リクエストを更に設定したい場合はこのメソッドを呼ぶ.
-	// 設定をしたリクエストは Do メソッドを呼んで送信する.
-	Request(ctx context.Context, method, path string, req interface{}) (*http.Request, error)
-
-	// Do sends a request.
-	// response is stored in res, and returns
-	// the processing result and error object.
-	//
-	// Do はリクエストを送信する.
-	// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
-	Do(req *http.Request, res interface{}) (*ResultInfo, error)
-}
-
-type clientImpl struct{ http *http.Client }
-
-var _ opaClient = (*clientImpl)(nil)
-
-func newClient(creds *Credential) opaClient {
+func newClient(creds *Credential) *opaClient {
 	return newClientWithHTTPClient(creds, &http.Client{})
 }
 
-func newClientWithHTTPClient(creds *Credential, hc *http.Client) opaClient {
+func newClientWithHTTPClient(creds *Credential, hc *http.Client) *opaClient {
 	if hc == nil {
 		panic("*http.Client must not be nil")
 	}
@@ -107,10 +60,16 @@ func newClientWithHTTPClient(creds *Credential, hc *http.Client) opaClient {
 
 	hc.Transport = newAuthenticateInterceptor(creds, tr)
 
-	return &clientImpl{http: hc}
+	return &opaClient{http: hc}
 }
 
-func (c *clientImpl) GET(
+// GET sends a GET request.
+// response is stored in res, and returns
+// the processing result and error object.
+//
+// GET は GET リクエストを送信する.
+// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
+func (c *opaClient) GET(
 	ctx context.Context,
 	path string,
 	res interface{},
@@ -123,7 +82,11 @@ func (c *clientImpl) GET(
 	return c.Do(req, res)
 }
 
-func (c *clientImpl) DELETE(
+// DELETE sends a DELETE request, and returns
+// the processing result and error object.
+//
+// DELETE は DELETE リクエストを送信し, 処理結果とエラーオブジェクトを返す.
+func (c *opaClient) DELETE(
 	ctx context.Context,
 	path string,
 ) (*ResultInfo, error) {
@@ -135,7 +98,13 @@ func (c *clientImpl) DELETE(
 	return c.Do(req, nil)
 }
 
-func (c *clientImpl) POST(
+// POST sends a POST request.
+// response is stored in res, and returns
+// the processing result and error object.
+//
+// POST は POST リクエストを送信する.
+// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
+func (c *opaClient) POST(
 	ctx context.Context,
 	path string,
 	res interface{},
@@ -149,7 +118,16 @@ func (c *clientImpl) POST(
 	return c.Do(rq, res)
 }
 
-func (c *clientImpl) Request(
+// Request creates a *http.Request from arguments.
+// Basically, you can simply execute the GET, DELETE, and POST methods,
+// but if you want to configure the request further, call this method.
+// The configured request is sent by calling the Do method.
+//
+// Requestは、引数から*http.Requestを作成する.
+// 基本的には単純に GET, DELETE, POST のメソッドを実行すればいいが,
+// リクエストを更に設定したい場合はこのメソッドを呼ぶ.
+// 設定をしたリクエストは Do メソッドを呼んで送信する.
+func (c *opaClient) Request(
 	ctx context.Context,
 	method, path string,
 	req interface{},
@@ -173,7 +151,13 @@ func (c *clientImpl) Request(
 	return rq, nil
 }
 
-func (c *clientImpl) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
+// Do sends a request.
+// response is stored in res, and returns
+// the processing result and error object.
+//
+// Do はリクエストを送信する.
+// res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
+func (c *opaClient) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
 	ctx, cancel := context.WithTimeout(
 		req.Context(),
 		getTimeout(req.Context()),

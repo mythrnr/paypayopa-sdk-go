@@ -18,7 +18,7 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/pending_payments
-type RequestMoney struct{ client opaClient }
+type RequestMoney struct{ client *opaClient }
 
 // NewRequestMoney returns a client for Request Money.
 //

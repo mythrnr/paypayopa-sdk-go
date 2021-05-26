@@ -18,7 +18,7 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/preauth_capture
-type PreAuthCapture struct{ client opaClient }
+type PreAuthCapture struct{ client *opaClient }
 
 // NewPreAuthCapture returns a client for PreAuth & Capture.
 //

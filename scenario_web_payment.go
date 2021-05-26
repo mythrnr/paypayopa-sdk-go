@@ -18,7 +18,7 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier
-type WebPayment struct{ client opaClient }
+type WebPayment struct{ client *opaClient }
 
 // NewWebPayment returns a client for Web Payment.
 //
