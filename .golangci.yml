@@ -73,6 +73,7 @@ issues:
         - "dupl"
         - "errcheck"
         - "funlen"
+        - "goerr113"
     - path: "example"
       linters:
         - "gomnd"

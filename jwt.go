@@ -1,8 +1,6 @@
 package paypayopa
 
 import (
-	"errors"
-
 	jwt "github.com/dgrijalva/jwt-go/v4"
 )
 
@@ -29,8 +27,6 @@ type rawToken struct {
 
 	jwt.StandardClaims
 }
-
-var ErrUnexpectedResponseToken = errors.New("unexpected response token")
 
 func decodeAuthorizationResponseToken(
 	creds *Credential,

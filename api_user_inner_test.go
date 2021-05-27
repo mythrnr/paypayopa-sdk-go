@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -72,7 +72,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
@@ -146,7 +146,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -200,7 +200,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
@@ -274,7 +274,7 @@ func Test_unlinkUser(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -315,7 +315,7 @@ func Test_unlinkUser(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
@@ -386,7 +386,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -433,7 +433,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",

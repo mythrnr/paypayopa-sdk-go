@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -139,7 +139,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INVALID_PARAMS",
 						"message": "Invalid parameters received",
@@ -217,7 +217,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -326,7 +326,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
 				// nolint:lll
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "USER_CONFIRMATION_REQUIRED",
 						"message": "User confirmation required as requested amount is above allowed limit",
@@ -372,7 +372,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "ALREADY_CAPTURED",
 						"message": "Cannot capture already captured acquiring order",
@@ -450,7 +450,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -503,7 +503,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "ORDER_NOT_CANCELABLE",
 						"message": "Order is not cancelable",

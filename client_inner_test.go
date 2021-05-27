@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"testing"
@@ -294,7 +294,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
-				Body:       io.NopCloser(bytes.NewBufferString(`invalid-json`)),
+				Body:       ioutil.NopCloser(bytes.NewBufferString(`invalid-json`)),
 			}, nil)
 
 		client := newClientWithHTTPClient(
@@ -330,7 +330,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -377,7 +377,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -426,7 +426,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -474,7 +474,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -500,7 +500,7 @@ func Test_clientImpl_Do(t *testing.T) {
 			context.Background(),
 			http.MethodPost,
 			"/test",
-			io.NopCloser(bytes.NewBufferString(`{ "test": "value" }`)),
+			ioutil.NopCloser(bytes.NewBufferString(`{ "test": "value" }`)),
 		)
 
 		res := struct {

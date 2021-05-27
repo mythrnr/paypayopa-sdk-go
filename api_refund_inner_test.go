@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_refundPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -82,7 +82,7 @@ func Test_refundPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INVALID_PARAMS",
 						"message": "Invalid parameters received",
@@ -156,7 +156,7 @@ func Test_getRefundDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -213,7 +213,7 @@ func Test_getRefundDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+				Body: ioutil.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "TRANSACTION_FAILED",
 						"message": "Transaction failed",
