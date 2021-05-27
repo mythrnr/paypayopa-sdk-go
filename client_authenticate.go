@@ -96,104 +96,80 @@ func (a *authenticate) setRequest(req *http.Request) error {
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
-func (a *authenticate) hash() (string, error) {
+func (a *authenticate) hash() string {
 	if len(a.body) == 0 {
 		a.hashCache = contentTypeEmpty
 	}
 
 	if a.hashCache != "" {
-		return a.hashCache, nil
+		return a.hashCache
 	}
 
 	hash := md5.New()
-	if _, err := hash.Write([]byte(a.contentType())); err != nil {
-		return "", fmt.Errorf("failed to write hash: %w", err)
-	}
-
-	if _, err := hash.Write(a.body); err != nil {
-		return "", fmt.Errorf("failed to write hash: %w", err)
-	}
+	hash.Write([]byte(a.contentType()))
+	hash.Write(a.body)
 
 	a.hashCache = base64.StdEncoding.EncodeToString(hash.Sum(nil))
 
-	return a.hashCache, nil
+	return a.hashCache
 }
 
-// hash is the process of Step 2 of the authentication header creation.
-// hash は認証ヘッダ作成の Step 2 の処理.
+// macData is the process of Step 2 of the authentication header creation.
+//
+// macData は認証ヘッダ作成の Step 2 の処理.
 //
 // API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
-func (a *authenticate) macData() ([]byte, error) {
-	h, err := a.hash()
-	if err != nil {
-		return nil, err
-	}
-
+func (a *authenticate) macData() []byte {
 	segments := []string{
 		a.uri,
 		a.method,
 		a.nonce,
 		strconv.FormatInt(a.epoch, 10),
 		a.contentType(),
-		h,
+		a.hash(),
 	}
 
-	return []byte(strings.Join(segments, "\n")), nil
+	return []byte(strings.Join(segments, "\n"))
 }
 
-// hash is the process of Step 3 of the authentication header creation.
-// hash は認証ヘッダ作成の Step 3 の処理.
+// base64hmacString is the process of Step 3 of the authentication header creation.
+//
+// base64hmacString は認証ヘッダ作成の Step 3 の処理.
 //
 // API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
-func (a *authenticate) base64hmacString() (string, error) {
-	b, err := a.macData()
-	if err != nil {
-		return "", err
-	}
-
+func (a *authenticate) base64hmacString() string {
 	mac := hmac.New(sha256.New, []byte(a.apiKeySecret))
-	if _, err := mac.Write(b); err != nil {
-		return "", fmt.Errorf("failed to write hmac: %w", err)
-	}
+	mac.Write(a.macData())
 
-	return base64.StdEncoding.EncodeToString(mac.Sum(nil)), nil
+	return base64.StdEncoding.EncodeToString(mac.Sum(nil))
 }
 
-// hash is the process of Step 4 of the authentication header creation.
-// hash は認証ヘッダ作成の Step 4 の処理.
+// hmacHeader is the process of Step 4 of the authentication header creation.
+//
+// hmacHeader は認証ヘッダ作成の Step 4 の処理.
 //
 // API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
-func (a *authenticate) hmacHeader() (string, error) {
-	h, err := a.hash()
-	if err != nil {
-		return "", err
-	}
-
-	macData, err := a.base64hmacString()
-	if err != nil {
-		return "", err
-	}
-
+func (a *authenticate) hmacHeader() string {
 	segments := []string{
 		headerAuthPrefix,
 		a.apiKey,
-		macData,
+		a.base64hmacString(),
 		a.nonce,
 		strconv.FormatInt(a.epoch, 10),
-		h,
+		a.hash(),
 	}
 
-	return strings.Join(segments, ":"), nil
+	return strings.Join(segments, ":")
 }

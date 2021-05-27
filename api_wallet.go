@@ -16,7 +16,7 @@ type CheckUserWalletBalancePayload struct {
 type GetUserWalletBalancePayload struct {
 	UserAuthorizationID string
 	Currency            Currency
-	ProductType         string
+	ProductType         ProductType
 }
 
 type CheckUserWalletBalance struct {
@@ -48,7 +48,7 @@ func checkUserWalletBalance(
 				strconv.FormatInt(int64(req.Amount), 10),
 			},
 			"currency":    []string{string(req.Currency)},
-			"productType": []string{req.ProductType},
+			"productType": []string{string(req.ProductType)},
 		}.Encode(),
 		res,
 	)
@@ -73,7 +73,7 @@ func getUserWalletBalance(
 		"/v6/wallet/balance?"+url.Values{
 			"userAuthorizationId": []string{req.UserAuthorizationID},
 			"currency":            []string{string(req.Currency)},
-			"productType":         []string{req.ProductType},
+			"productType":         []string{string(req.ProductType)},
 		}.Encode(),
 		res,
 	)

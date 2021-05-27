@@ -18,13 +18,19 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/pending_payments
-type RequestMoney struct{ client *opaClient }
+type RequestMoney struct {
+	client *opaClient
+	creds  *Credential
+}
 
 // NewRequestMoney returns a client for Request Money.
 //
 // NewRequestMoney は Request Money のクライアントを返す.
 func NewRequestMoney(creds *Credential) *RequestMoney {
-	return &RequestMoney{client: newClient(creds)}
+	return &RequestMoney{
+		client: newClient(creds),
+		creds:  creds,
+	}
 }
 
 // NewRequestMoneyWithHTTPClient returns a Request Money client
@@ -36,7 +42,10 @@ func NewRequestMoneyWithHTTPClient(
 	creds *Credential,
 	client *http.Client,
 ) *RequestMoney {
-	return &RequestMoney{client: newClientWithHTTPClient(creds, client)}
+	return &RequestMoney{
+		client: newClientWithHTTPClient(creds, client),
+		creds:  creds,
+	}
 }
 
 // CreatePendingPayment sends a push notification
@@ -132,9 +141,9 @@ func (r *RequestMoney) GetRefundDetails(
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html#operation/createQRSession
 func (r *RequestMoney) CreateAccountLinkQRCode(
 	ctx context.Context,
-	req *CreateAccountLinkQrCodePayload,
-) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
-	return createAccountLinkQrCode(ctx, r.client, req)
+	req *CreateAccountLinkQRCodePayload,
+) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
+	return createAccountLinkQRCode(ctx, r.client, req)
 }
 
 // GetMaskedUserProfile retrieves the masked phone number of the user.
@@ -151,4 +160,21 @@ func (r *RequestMoney) GetMaskedUserProfile(
 	userAuthorizationID string,
 ) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, r.client, userAuthorizationID)
+}
+
+// DecodeResponseToken decodes and returns the JWT of
+// the user's authorization result.
+//
+// DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
+//
+// API Docs
+//
+// EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
+//
+// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
+func (r *RequestMoney) DecodeResponseToken(
+	ctx context.Context,
+	token string,
+) (*AuthorizationResponseToken, error) {
+	return decodeAuthorizationResponseToken(r.creds, token)
 }

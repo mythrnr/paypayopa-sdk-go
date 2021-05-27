@@ -18,13 +18,19 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/preauth_capture
-type PreAuthCapture struct{ client *opaClient }
+type PreAuthCapture struct {
+	client *opaClient
+	creds  *Credential
+}
 
 // NewPreAuthCapture returns a client for PreAuth & Capture.
 //
 // NewPreAuthCapture は PreAuth & Capture のクライアントを返す.
 func NewPreAuthCapture(creds *Credential) *PreAuthCapture {
-	return &PreAuthCapture{client: newClient(creds)}
+	return &PreAuthCapture{
+		client: newClient(creds),
+		creds:  creds,
+	}
 }
 
 // NewPreAuthCaptureWithHTTPClient returns a PreAuth & Capture client
@@ -36,7 +42,10 @@ func NewPreAuthCaptureWithHTTPClient(
 	creds *Credential,
 	client *http.Client,
 ) *PreAuthCapture {
-	return &PreAuthCapture{client: newClientWithHTTPClient(creds, client)}
+	return &PreAuthCapture{
+		client: newClientWithHTTPClient(creds, client),
+		creds:  creds,
+	}
 }
 
 // ConsultExpectedCashbackInfo consult expected cashback info
@@ -266,9 +275,9 @@ func (p *PreAuthCapture) CheckUserWalletBalance(
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html#operation/createQRSession
 func (p *PreAuthCapture) CreateAccountLinkQRCode(
 	ctx context.Context,
-	req *CreateAccountLinkQrCodePayload,
-) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
-	return createAccountLinkQrCode(ctx, p.client, req)
+	req *CreateAccountLinkQRCodePayload,
+) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
+	return createAccountLinkQRCode(ctx, p.client, req)
 }
 
 // UnlinkUser unlinks an user from the client.
@@ -317,4 +326,21 @@ func (p *PreAuthCapture) GetMaskedUserProfile(
 	userAuthorizationID string,
 ) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, p.client, userAuthorizationID)
+}
+
+// DecodeResponseToken decodes and returns the JWT of
+// the user's authorization result.
+//
+// DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
+//
+// API Docs
+//
+// EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
+//
+// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
+func (p *PreAuthCapture) DecodeResponseToken(
+	ctx context.Context,
+	token string,
+) (*AuthorizationResponseToken, error) {
+	return decodeAuthorizationResponseToken(p.creds, token)
 }

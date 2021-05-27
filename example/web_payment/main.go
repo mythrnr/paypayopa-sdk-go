@@ -21,7 +21,7 @@ func main() {
 	wp := paypayopa.NewWebPayment(creds)
 	ctx := context.Background()
 
-	res, info, err := wp.CreateQRCode(ctx, &paypayopa.CreateQrCodePayload{
+	res, info, err := wp.CreateQRCode(ctx, &paypayopa.CreateQRCodePayload{
 		MerchantPaymentID: uuid.NewString(),
 		Amount: &paypayopa.MoneyAmount{
 			Amount:   1000,

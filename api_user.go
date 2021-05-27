@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type CreateAccountLinkQrCodePayload struct {
+type CreateAccountLinkQRCodePayload struct {
 	Scopes       []Scope `json:"scopes"`
 	Nonce        string  `json:"nonce"`
 	RedirectType string  `json:"redirectType"`
@@ -18,50 +18,23 @@ type CreateAccountLinkQrCodePayload struct {
 	UserAgent    string  `json:"userAgent"`
 }
 
-type CreateAccountLinkQrCodeResponse struct {
+type CreateAccountLinkQRCodeResponse struct {
 	LinkQRCodeURL string `json:"linkQRCodeURL"`
 }
 
-func createAccountLinkQrCode(
+func createAccountLinkQRCode(
 	ctx context.Context,
 	client *opaClient,
-	req *CreateAccountLinkQrCodePayload,
-) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
+	req *CreateAccountLinkQRCodePayload,
+) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
 	const timeout = 10 * time.Second
 
-	res := &CreateAccountLinkQrCodeResponse{}
+	res := &CreateAccountLinkQRCodeResponse{}
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/qr/sessions",
 		res,
 		req,
-	)
-
-	if err != nil || !info.Success() {
-		return nil, info, err
-	}
-
-	return res, info, nil
-}
-
-type GetMaskedUserProfileResponse struct {
-	PhoneNumber string `json:"phoneNumber"`
-}
-
-func getMaskedUserProfile(
-	ctx context.Context,
-	client *opaClient,
-	userAuthorizationID string,
-) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
-	const timeout = 15 * time.Second
-
-	res := &GetMaskedUserProfileResponse{}
-	info, err := client.GET(
-		ctxWithTimeout(ctx, timeout),
-		"/v2/user/profile/secure?"+url.Values{
-			"userAuthorizationId": []string{userAuthorizationID},
-		}.Encode(),
-		res,
 	)
 
 	if err != nil || !info.Success() {
@@ -90,7 +63,9 @@ func getUserAuthorizationStatus(
 	res := &GetUserAuthorizationStatusResponse{}
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
-		"/v2/user/authorizations/"+userAuthorizationID,
+		"/v2/user/authorizations?"+url.Values{
+			"userAuthorizationId": []string{userAuthorizationID},
+		}.Encode(),
 		res,
 	)
 
@@ -112,4 +87,31 @@ func unlinkUser(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/user/authorizations/"+userAuthorizationID,
 	)
+}
+
+type GetMaskedUserProfileResponse struct {
+	PhoneNumber string `json:"phoneNumber"`
+}
+
+func getMaskedUserProfile(
+	ctx context.Context,
+	client *opaClient,
+	userAuthorizationID string,
+) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
+	const timeout = 15 * time.Second
+
+	res := &GetMaskedUserProfileResponse{}
+	info, err := client.GET(
+		ctxWithTimeout(ctx, timeout),
+		"/v2/user/profile/secure?"+url.Values{
+			"userAuthorizationId": []string{userAuthorizationID},
+		}.Encode(),
+		res,
+	)
+
+	if err != nil || !info.Success() {
+		return nil, info, err
+	}
+
+	return res, info, nil
 }

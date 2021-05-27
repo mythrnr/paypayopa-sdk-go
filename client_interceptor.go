@@ -23,7 +23,7 @@ func newAuthenticateInterceptor(
 	return &authInterceptor{creds: creds, next: next}
 }
 
-// RoundTrip interrupts the request and sets the authentication information.
+// RoundTrip intercepts the request and sets the authentication information.
 //
 // RoundTrip はリクエストに割り込んで認証情報を設定する.
 func (i *authInterceptor) RoundTrip(req *http.Request) (*http.Response, error) {
@@ -32,16 +32,11 @@ func (i *authInterceptor) RoundTrip(req *http.Request) (*http.Response, error) {
 		return nil, err
 	}
 
-	header, err := a.hmacHeader()
-	if err != nil {
-		return nil, err
-	}
-
 	u, _ := url.Parse(string(i.creds.env) + req.URL.String())
 	req.URL = u
 
 	req.Header.Set("Content-Type", a.contentType())
-	req.Header.Set(headerNameAuth, header)
+	req.Header.Set(headerNameAuth, a.hmacHeader())
 
 	if i.creds.merchantID != "" {
 		req.Header.Set(headerNameMerchant, i.creds.merchantID)

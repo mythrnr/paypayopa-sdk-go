@@ -59,6 +59,32 @@ const (
 	headerNameLang = "lang"
 )
 
+// ProductType is the product type of the PayPay system.
+// Merchants that are restricted to using a particular product type
+// will need to specify this value when displaying the user's balance.
+//
+// ProductType は PayPay システムのプロダクトタイプ.
+// 特定のプロダクトタイプを使用するように制限されている加盟店は,
+// ユーザーの残高を表示する際にこの値を指定する必要がある.
+type ProductType string
+
+const (
+	// ProductTypeVirtualBonusInvestment is a type of product type.
+	//
+	// ProductTypeVirtualBonusInvestment はプロダクトタイプの一種.
+	ProductTypeVirtualBonusInvestment ProductType = "VIRTUAL_BONUS_INVESTMENT"
+
+	// ProductTypePayLaterRepayment is a type of product type.
+	//
+	// ProductTypePayLaterRepayment はプロダクトタイプの一種.
+	ProductTypePayLaterRepayment ProductType = "PAY_LATER_REPAYMENT"
+
+	// ProductTypeRealInvestment is a type of product type.
+	//
+	// ProductTypeRealInvestment はプロダクトタイプの一種.
+	ProductTypeRealInvestment ProductType = "REAL_INVESTMENT"
+)
+
 // RedirectType is the type of redirection to specify
 // when sending a QR Code creation request.
 //
@@ -194,4 +220,29 @@ const (
 	// ScopeBankRegistration はユーザー認可のスコープの
 	// bank_registration を表す.
 	ScopeBankRegistration Scope = "bank_registration"
+)
+
+// UserAuthorizeResult is the result of user authorization.
+//
+// UserAuthorizeResult はユーザーの認可の結果.
+type UserAuthorizeResult string
+
+const (
+	// UserAuthorizeResultSucceeded is the value when
+	// the authorization was obtained.
+	//
+	// UserAuthorizeResultSucceeded は認可が取得できたときの値.
+	UserAuthorizeResultSucceeded UserAuthorizeResult = "succeeded"
+
+	// UserAuthorizeResultDeclined is the value when
+	// the authorization could not be obtained.
+	//
+	// UserAuthorizeResultDeclined は認可が取得できなかったときの値.
+	UserAuthorizeResultDeclined UserAuthorizeResult = "declined"
+
+	// UserAuthorizeResultBadRequest is the value when
+	// it fails due to other factors.
+	//
+	// UserAuthorizeResultBadRequest は他の要因で失敗したときの値.
+	UserAuthorizeResultBadRequest UserAuthorizeResult = "bad_request"
 )

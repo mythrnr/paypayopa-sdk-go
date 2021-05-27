@@ -50,7 +50,7 @@ func NewWebPaymentWithHTTPClient(
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#operation/createQRCode
 func (w *WebPayment) CreateQRCode(
 	ctx context.Context,
-	req *CreateQrCodePayload,
+	req *CreateQRCodePayload,
 ) (*QRCodeResponse, *ResultInfo, error) {
 	return createQRCode(ctx, w.client, req)
 }

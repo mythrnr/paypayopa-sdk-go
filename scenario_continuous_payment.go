@@ -19,13 +19,19 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/continuous_payments
-type ContinuousPayment struct{ client *opaClient }
+type ContinuousPayment struct {
+	client *opaClient
+	creds  *Credential
+}
 
 // NewContinuousPayment returns a client for Continuous Payment.
 //
 // NewContinuousPayment は Continuous Payment のクライアントを返す.
 func NewContinuousPayment(creds *Credential) *ContinuousPayment {
-	return &ContinuousPayment{client: newClient(creds)}
+	return &ContinuousPayment{
+		client: newClient(creds),
+		creds:  creds,
+	}
 }
 
 // NewContinuousPaymentWithHTTPClient returns a Continuous Payment client
@@ -37,7 +43,10 @@ func NewContinuousPaymentWithHTTPClient(
 	creds *Credential,
 	client *http.Client,
 ) *ContinuousPayment {
-	return &ContinuousPayment{client: newClientWithHTTPClient(creds, client)}
+	return &ContinuousPayment{
+		client: newClientWithHTTPClient(creds, client),
+		creds:  creds,
+	}
 }
 
 // CreateContinuousPayment create a continuous payment
@@ -133,9 +142,9 @@ func (c *ContinuousPayment) GetRefundDetails(
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html#operation/createQRSession
 func (c *ContinuousPayment) CreateAccountLinkQRCode(
 	ctx context.Context,
-	req *CreateAccountLinkQrCodePayload,
-) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
-	return createAccountLinkQrCode(ctx, c.client, req)
+	req *CreateAccountLinkQRCodePayload,
+) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
+	return createAccountLinkQRCode(ctx, c.client, req)
 }
 
 // UnlinkUser unlinks an user from the client.
@@ -185,4 +194,21 @@ func (c *ContinuousPayment) GetMaskedUserProfile(
 	userAuthorizationID string,
 ) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, c.client, userAuthorizationID)
+}
+
+// DecodeResponseToken decodes and returns the JWT of
+// the user's authorization result.
+//
+// DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
+//
+// API Docs
+//
+// EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
+//
+// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
+func (c *ContinuousPayment) DecodeResponseToken(
+	ctx context.Context,
+	token string,
+) (*AuthorizationResponseToken, error) {
+	return decodeAuthorizationResponseToken(c.creds, token)
 }

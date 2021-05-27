@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type CreateQrCodePayload struct {
+type CreateQRCodePayload struct {
 	MerchantPaymentID   string               `json:"merchantPaymentId"`
 	Amount              *MoneyAmount         `json:"amount"`
 	OrderDescription    string               `json:"orderDescription"`
@@ -56,7 +56,7 @@ type MerchantOrderItemResponse struct {
 func createQRCode(
 	ctx context.Context,
 	client *opaClient,
-	req *CreateQrCodePayload,
+	req *CreateQRCodePayload,
 ) (*QRCodeResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 

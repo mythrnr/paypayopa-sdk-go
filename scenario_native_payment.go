@@ -18,13 +18,19 @@ import (
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/direct_debit
-type NativePayment struct{ client *opaClient }
+type NativePayment struct {
+	client *opaClient
+	creds  *Credential
+}
 
 // NewNativePayment returns a client for Native Payment.
 //
 // NewNativePayment は Native Payment のクライアントを返す.
 func NewNativePayment(creds *Credential) *NativePayment {
-	return &NativePayment{client: newClient(creds)}
+	return &NativePayment{
+		client: newClient(creds),
+		creds:  creds,
+	}
 }
 
 // NewNativePaymentWithHTTPClient returns a Native Payment client
@@ -36,7 +42,10 @@ func NewNativePaymentWithHTTPClient(
 	creds *Credential,
 	client *http.Client,
 ) *NativePayment {
-	return &NativePayment{client: newClientWithHTTPClient(creds, client)}
+	return &NativePayment{
+		client: newClientWithHTTPClient(creds, client),
+		creds:  creds,
+	}
 }
 
 // ConsultExpectedCashbackInfo consult expected cashback info
@@ -229,9 +238,9 @@ func (n *NativePayment) CheckUserWalletBalance(
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html#operation/createQRSession
 func (n *NativePayment) CreateAccountLinkQRCode(
 	ctx context.Context,
-	req *CreateAccountLinkQrCodePayload,
-) (*CreateAccountLinkQrCodeResponse, *ResultInfo, error) {
-	return createAccountLinkQrCode(ctx, n.client, req)
+	req *CreateAccountLinkQRCodePayload,
+) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
+	return createAccountLinkQRCode(ctx, n.client, req)
 }
 
 // UnlinkUser unlinks an user from the client.
@@ -280,4 +289,21 @@ func (n *NativePayment) GetMaskedUserProfile(
 	userAuthorizationID string,
 ) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	return getMaskedUserProfile(ctx, n.client, userAuthorizationID)
+}
+
+// DecodeResponseToken decodes and returns the JWT of
+// the user's authorization result.
+//
+// DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
+//
+// API Docs
+//
+// EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
+//
+// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
+func (n *NativePayment) DecodeResponseToken(
+	ctx context.Context,
+	token string,
+) (*AuthorizationResponseToken, error) {
+	return decodeAuthorizationResponseToken(n.creds, token)
 }
