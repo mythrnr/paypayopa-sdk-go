@@ -22,7 +22,7 @@ Example to create and delete QR code using Web Payment
 	)
 
 	func main() {
-		creds := paypayopa.NewCredential(
+		creds := paypayopa.NewCredentials(
 			paypayopa.EnvSandbox,
 			os.Getenv("PAYPAYOPA_API_KEY"),
 			os.Getenv("PAYPAYOPA_API_KEY_SECRET"),
