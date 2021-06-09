@@ -1,30 +1,5 @@
 package paypayopa
 
-// Environment is a type used to specify the destination of the request.
-//
-// Environment はリクエストの送信先を指定するための型.
-type Environment string
-
-const (
-	// EnvProduction is a value that specifies that the request should be
-	// sent to the production environment.
-	//
-	// EnvProduction は本番環境にリクエストを送ることを指定する値.
-	EnvProduction Environment = "https://api.paypay.ne.jp"
-
-	// EnvStaging is a value that specifies that the request should be
-	// sent to the staging environment.
-	//
-	// EnvStaging はステージング環境にリクエストを送ることを指定する値.
-	EnvStaging Environment = "https://stg-api.paypay.ne.jp"
-
-	// EnvSandbox is a value that specifies that the request should be
-	// sent to the sandbox environment.
-	//
-	// EnvSandbox はサンドボックス環境にリクエストを送ることを指定する値.
-	EnvSandbox Environment = "https://stg-api.sandbox.paypay.ne.jp"
-)
-
 // Credential is a structure that holds credentials.
 //
 // Credential は資格情報を保持する構造体.

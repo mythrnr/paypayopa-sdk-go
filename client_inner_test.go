@@ -17,30 +17,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_ctx_timeout(t *testing.T) {
-	t.Parallel()
-
-	t.Run("timeout is set", func(t *testing.T) {
-		t.Parallel()
-
-		expected := time.Second
-
-		ctx := ctxWithTimeout(context.Background(), expected)
-		actual := getTimeout(ctx)
-
-		assert.Equal(t, expected, actual)
-	})
-
-	t.Run("timeout is not set", func(t *testing.T) {
-		t.Parallel()
-
-		ctx := context.Background()
-		actual := getTimeout(ctx)
-
-		assert.Equal(t, timeout, actual)
-	})
-}
-
 func Test_newClient(t *testing.T) {
 	t.Parallel()
 
@@ -96,7 +72,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 	})
 }
 
-func Test_clientImpl_Request(t *testing.T) {
+func Test_opaClient_Request(t *testing.T) {
 	t.Parallel()
 
 	t.Run("Invalid request body", func(t *testing.T) {
@@ -177,7 +153,7 @@ func Test_clientImpl_Request(t *testing.T) {
 	})
 }
 
-func Test_clientImpl_Do(t *testing.T) {
+func Test_opaClient_Do(t *testing.T) {
 	t.Parallel()
 
 	t.Run("Timeout", func(t *testing.T) {
@@ -519,5 +495,29 @@ func Test_clientImpl_Do(t *testing.T) {
 		assert.True(t, info.Success())
 
 		assert.Equal(t, "value", res.Key)
+	})
+}
+
+func Test_ctx_timeout(t *testing.T) {
+	t.Parallel()
+
+	t.Run("timeout is set", func(t *testing.T) {
+		t.Parallel()
+
+		expected := time.Second
+
+		ctx := ctxWithTimeout(context.Background(), expected)
+		actual := getTimeout(ctx)
+
+		assert.Equal(t, expected, actual)
+	})
+
+	t.Run("timeout is not set", func(t *testing.T) {
+		t.Parallel()
+
+		ctx := context.Background()
+		actual := getTimeout(ctx)
+
+		assert.Equal(t, timeout, actual)
 	})
 }

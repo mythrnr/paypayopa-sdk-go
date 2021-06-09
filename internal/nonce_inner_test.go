@@ -1,10 +1,9 @@
-package paypayopa_test
+package internal
 
 import (
 	"regexp"
 	"testing"
 
-	"github.com/mythrnr/paypayopa-sdk-go"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,7 +13,7 @@ var (
 	ptn100 = regexp.MustCompile("[0-9a-zA-Z]{100}")
 )
 
-func Test_None(t *testing.T) {
+func Test_Nonce(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -44,7 +43,7 @@ func Test_None(t *testing.T) {
 
 		assert.Equal(t,
 			tt.want,
-			tt.rgx.Match([]byte(paypayopa.Nonce(tt.num))),
+			tt.rgx.Match([]byte(nonce(tt.num))),
 		)
 	}
 }

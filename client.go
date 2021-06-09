@@ -9,31 +9,11 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
+
+	"github.com/mythrnr/paypayopa-sdk-go/internal"
 )
-
-// timeout is the maximum timeout setting for the client.
-// It is recommended to set it to 30s or more, so double it.
-// Normally, no response is expected if you wait longer than this.
-//
-// timeout はクライアントの最長タイムアウト設定.
-// 30s 以上に設定することが推奨されている為, 倍を設定.
-// 通常, これ以上待機してもレスポンスは期待できない.
-const timeout = 60 * time.Second
-
-type ctxkeyTimeout struct{}
-
-func ctxWithTimeout(ctx context.Context, d time.Duration) context.Context {
-	return context.WithValue(ctx, &ctxkeyTimeout{}, d)
-}
-
-func getTimeout(ctx context.Context) time.Duration {
-	if d, ok := ctx.Value(&ctxkeyTimeout{}).(time.Duration); ok {
-		return d
-	}
-
-	return timeout
-}
 
 // opaClient is the client for handling requests/responses to the PayPay API.
 //
@@ -207,4 +187,67 @@ func (c *opaClient) Do(req *http.Request, res interface{}) (*ResultInfo, error) 
 	}
 
 	return info, nil
+}
+
+// timeout is the maximum timeout setting for the client.
+// It is recommended to set it to 30s or more, so double it.
+// Normally, no response is expected if you wait longer than this.
+//
+// timeout はクライアントの最長タイムアウト設定.
+// 30s 以上に設定することが推奨されている為, 倍を設定.
+// 通常, これ以上待機してもレスポンスは期待できない.
+const timeout = 60 * time.Second
+
+type ctxkeyTimeout struct{}
+
+func ctxWithTimeout(ctx context.Context, d time.Duration) context.Context {
+	return context.WithValue(ctx, &ctxkeyTimeout{}, d)
+}
+
+func getTimeout(ctx context.Context) time.Duration {
+	if d, ok := ctx.Value(&ctxkeyTimeout{}).(time.Duration); ok {
+		return d
+	}
+
+	return timeout
+}
+
+type authInterceptor struct {
+	creds *Credential
+	next  http.RoundTripper
+}
+
+var _ http.RoundTripper = (*authInterceptor)(nil)
+
+func newAuthenticateInterceptor(
+	creds *Credential,
+	next http.RoundTripper,
+) http.RoundTripper {
+	if creds == nil {
+		panic("*Credential must not be nil")
+	}
+
+	return &authInterceptor{creds: creds, next: next}
+}
+
+// RoundTrip intercepts the request and sets the authentication information.
+//
+// RoundTrip はリクエストに割り込んで認証情報を設定する.
+func (i *authInterceptor) RoundTrip(req *http.Request) (*http.Response, error) {
+	s, err := internal.NewSigner(i.creds.apiKey, i.creds.apiKeySecret, req)
+	if err != nil {
+		return nil, err
+	}
+
+	u, _ := url.Parse(string(i.creds.env) + req.URL.String())
+	req.URL = u
+
+	req.Header.Set("Content-Type", s.ContentType())
+	req.Header.Set("Authorization", s.Sign())
+
+	if i.creds.merchantID != "" {
+		req.Header.Set("X-ASSUME-MERCHANT", i.creds.merchantID)
+	}
+
+	return i.next.RoundTrip(req)
 }

@@ -13,9 +13,6 @@ type AuthorizationResponseToken struct {
 	Nonce               string
 	UserAuthorizationID string
 	ReferenceID         string
-
-	// catch and handle yourself
-	Err error
 }
 
 type rawToken struct {
@@ -56,6 +53,5 @@ func decodeAuthorizationResponseToken(
 		Nonce:               claims.Nonce,
 		UserAuthorizationID: claims.UserAuthorizationID,
 		ReferenceID:         claims.ReferenceID,
-		Err:                 err,
-	}, nil
+	}, err
 }

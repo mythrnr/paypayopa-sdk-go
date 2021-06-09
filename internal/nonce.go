@@ -1,14 +1,14 @@
-package paypayopa
+package internal
 
 import (
 	"math/rand"
 	"time"
 )
 
-// Nonce generates a random string with a specified number of characters.
+// nonce generates a random string with a specified number of characters.
 //
-// Nonce は指定された文字数のランダムな文字列を生成する.
-func Nonce(n uint) string {
+// nonce は指定された文字数のランダムな文字列を生成する.
+func nonce(n uint) string {
 	if n == 0 {
 		return ""
 	}

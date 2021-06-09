@@ -23,7 +23,8 @@ func Test_decodeAuthorizationResponseToken(t *testing.T) {
 
 	token, err := decodeAuthorizationResponseToken(creds, testJWT)
 
-	assert.Nil(t, err)
+	jwtErr := &jwt.TokenExpiredError{}
+	assert.ErrorAs(t, err, &jwtErr)
 	require.NotNil(t, token)
 
 	assert.Equal(t, "MERCHANT_ID", token.Audience)
@@ -34,7 +35,4 @@ func Test_decodeAuthorizationResponseToken(t *testing.T) {
 	assert.Equal(t, "the-same-nonce-in-the-request", token.Nonce)
 	assert.Equal(t, "PayPay user reference id", token.UserAuthorizationID)
 	assert.Equal(t, "merchant user reference id", token.ReferenceID)
-
-	jwtErr := &jwt.TokenExpiredError{}
-	assert.ErrorAs(t, token.Err, &jwtErr)
 }
