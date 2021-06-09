@@ -20,13 +20,13 @@ import (
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/pending_payments
 type RequestMoney struct {
 	client *opaClient
-	creds  *Credential
+	creds  *Credentials
 }
 
 // NewRequestMoney returns a client for Request Money.
 //
 // NewRequestMoney は Request Money のクライアントを返す.
-func NewRequestMoney(creds *Credential) *RequestMoney {
+func NewRequestMoney(creds *Credentials) *RequestMoney {
 	return &RequestMoney{
 		client: newClient(creds),
 		creds:  creds,
@@ -39,7 +39,7 @@ func NewRequestMoney(creds *Credential) *RequestMoney {
 // NewRequestMoneyWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // Request Money のクライアントを返す.
 func NewRequestMoneyWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *RequestMoney {
 	return &RequestMoney{

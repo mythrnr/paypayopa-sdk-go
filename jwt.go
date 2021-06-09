@@ -26,7 +26,7 @@ type rawToken struct {
 }
 
 func decodeAuthorizationResponseToken(
-	creds *Credential,
+	creds *Credentials,
 	token string,
 ) (*AuthorizationResponseToken, error) {
 	claims := rawToken{}

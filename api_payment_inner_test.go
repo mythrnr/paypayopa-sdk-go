@@ -80,7 +80,7 @@ func Test_createPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -124,7 +124,7 @@ func Test_createPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -158,7 +158,7 @@ func Test_createPayment(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -198,7 +198,7 @@ func Test_cancelPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -239,7 +239,7 @@ func Test_cancelPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -271,7 +271,7 @@ func Test_cancelPayment(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -355,7 +355,7 @@ func Test_getPaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -399,7 +399,7 @@ func Test_getPaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -433,7 +433,7 @@ func Test_getPaymentDetails(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -518,7 +518,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -564,7 +564,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -600,7 +600,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -645,7 +645,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -698,7 +698,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -744,7 +744,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -780,7 +780,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",

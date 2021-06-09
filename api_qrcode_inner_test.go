@@ -69,7 +69,7 @@ func Test_createQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -113,7 +113,7 @@ func Test_createQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -147,7 +147,7 @@ func Test_createQRCode(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -187,7 +187,7 @@ func Test_deleteQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -228,7 +228,7 @@ func Test_deleteQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -260,7 +260,7 @@ func Test_deleteQRCode(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -367,7 +367,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -411,7 +411,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -445,7 +445,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",

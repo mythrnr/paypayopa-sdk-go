@@ -21,7 +21,7 @@ func Test_newClient(t *testing.T) {
 	t.Parallel()
 
 	assert.NotPanics(t, func() {
-		client := newClient(NewCredential(
+		client := newClient(NewCredentials(
 			EnvSandbox,
 			"API_KEY",
 			"API_KEY_SECRET",
@@ -43,7 +43,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 
 	assert.NotPanics(t, func() {
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -57,7 +57,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 
 	assert.PanicsWithValue(t, "*http.Client must not be nil", func() {
 		newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -67,7 +67,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 		)
 	})
 
-	assert.PanicsWithValue(t, "*Credential must not be nil", func() {
+	assert.PanicsWithValue(t, "*Credentials must not be nil", func() {
 		newClientWithHTTPClient(nil, &http.Client{})
 	})
 }
@@ -79,7 +79,7 @@ func Test_opaClient_Request(t *testing.T) {
 		t.Parallel()
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -107,7 +107,7 @@ func Test_opaClient_Request(t *testing.T) {
 		t.Parallel()
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -132,7 +132,7 @@ func Test_opaClient_Request(t *testing.T) {
 		t.Parallel()
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -164,7 +164,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(nil, context.DeadlineExceeded)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -196,7 +196,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -239,7 +239,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -274,7 +274,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -316,7 +316,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -366,7 +366,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -415,7 +415,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -463,7 +463,7 @@ func Test_opaClient_Do(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",

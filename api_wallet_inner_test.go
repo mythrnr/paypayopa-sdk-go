@@ -38,7 +38,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -82,7 +82,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -116,7 +116,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -178,7 +178,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -240,7 +240,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -274,7 +274,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -332,7 +332,7 @@ func Test_createTopupQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -376,7 +376,7 @@ func Test_createTopupQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -410,7 +410,7 @@ func Test_createTopupQRCode(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -450,7 +450,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -491,7 +491,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -523,7 +523,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -572,7 +572,7 @@ func Test_getTopupDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -616,7 +616,7 @@ func Test_getTopupDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -650,7 +650,7 @@ func Test_getTopupDetails(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",

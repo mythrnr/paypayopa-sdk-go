@@ -1,18 +1,18 @@
 package paypayopa
 
-// Credential is a structure that holds credentials.
+// Credentials is a structure that holds credentials.
 //
-// Credential は資格情報を保持する構造体.
-type Credential struct {
+// Credentials は資格情報を保持する構造体.
+type Credentials struct {
 	env          Environment
 	apiKey       string
 	apiKeySecret string
 	merchantID   string
 }
 
-// NewCredential creates a structure to hold the credentials.
+// NewCredentials creates a structure to hold the credentials.
 //
-// NewCredential は資格情報を保持する構造体を生成する.
+// NewCredentials は資格情報を保持する構造体を生成する.
 //
 // About Arguments
 //
@@ -36,13 +36,13 @@ type Credential struct {
 //   The merchant ID registered with PayPay for Developers.
 //
 //   PayPay for Developers で登録した加盟店の ID.
-func NewCredential(
+func NewCredentials(
 	env Environment,
 	apiKey string,
 	apiKeySecret string,
 	merchantID string,
-) *Credential {
-	return &Credential{
+) *Credentials {
+	return &Credentials{
 		env:          env,
 		apiKey:       apiKey,
 		apiKeySecret: apiKeySecret,

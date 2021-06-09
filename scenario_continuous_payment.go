@@ -21,13 +21,13 @@ import (
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/continuous_payments
 type ContinuousPayment struct {
 	client *opaClient
-	creds  *Credential
+	creds  *Credentials
 }
 
 // NewContinuousPayment returns a client for Continuous Payment.
 //
 // NewContinuousPayment は Continuous Payment のクライアントを返す.
-func NewContinuousPayment(creds *Credential) *ContinuousPayment {
+func NewContinuousPayment(creds *Credentials) *ContinuousPayment {
 	return &ContinuousPayment{
 		client: newClient(creds),
 		creds:  creds,
@@ -40,7 +40,7 @@ func NewContinuousPayment(creds *Credential) *ContinuousPayment {
 // NewContinuousPaymentWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // Continuous Payment のクライアントを返す.
 func NewContinuousPaymentWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *ContinuousPayment {
 	return &ContinuousPayment{

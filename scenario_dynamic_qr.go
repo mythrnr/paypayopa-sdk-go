@@ -20,7 +20,7 @@ type DynamicQR WebPayment
 // NewDynamicQR returns a client for Dynamic QR.
 //
 // NewDynamicQR は Dynamic QR のクライアントを返す.
-func NewDynamicQR(creds *Credential) *DynamicQR {
+func NewDynamicQR(creds *Credentials) *DynamicQR {
 	return &DynamicQR{client: newClient(creds)}
 }
 
@@ -30,7 +30,7 @@ func NewDynamicQR(creds *Credential) *DynamicQR {
 // NewDynamicQRWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // Dynamic QR のクライアントを返す.
 func NewDynamicQRWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *DynamicQR {
 	return &DynamicQR{client: newClientWithHTTPClient(creds, client)}

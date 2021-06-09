@@ -62,7 +62,7 @@ func Test_createPendingPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -106,7 +106,7 @@ func Test_createPendingPayment(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -140,7 +140,7 @@ func Test_createPendingPayment(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -180,7 +180,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -221,7 +221,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -253,7 +253,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -338,7 +338,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -382,7 +382,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 			}, nil)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",
@@ -416,7 +416,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 			Return(nil, expected)
 
 		client := newClientWithHTTPClient(
-			NewCredential(
+			NewCredentials(
 				EnvSandbox,
 				"API_KEY",
 				"API_KEY_SECRET",

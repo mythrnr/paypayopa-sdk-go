@@ -14,7 +14,7 @@ const testJWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJNRVJDSEFOVF9JRC
 func Test_decodeAuthorizationResponseToken(t *testing.T) {
 	t.Parallel()
 
-	creds := NewCredential(
+	creds := NewCredentials(
 		EnvSandbox,
 		"API_KEY",
 		"API_KEY_SECRET",

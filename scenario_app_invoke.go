@@ -20,7 +20,7 @@ type AppInvoke WebPayment
 // NewAppInvoke returns a client for App Invoke.
 //
 // NewAppInvoke は App Invoke のクライアントを返す.
-func NewAppInvoke(creds *Credential) *AppInvoke {
+func NewAppInvoke(creds *Credentials) *AppInvoke {
 	return &AppInvoke{client: newClient(creds)}
 }
 
@@ -30,7 +30,7 @@ func NewAppInvoke(creds *Credential) *AppInvoke {
 // NewAppInvokeWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // App Invoke のクライアントを返す.
 func NewAppInvokeWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *AppInvoke {
 	return &AppInvoke{client: newClientWithHTTPClient(creds, client)}

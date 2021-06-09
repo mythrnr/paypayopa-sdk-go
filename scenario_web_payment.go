@@ -23,7 +23,7 @@ type WebPayment struct{ client *opaClient }
 // NewWebPayment returns a client for Web Payment.
 //
 // NewWebPayment は Web Payment のクライアントを返す.
-func NewWebPayment(creds *Credential) *WebPayment {
+func NewWebPayment(creds *Credentials) *WebPayment {
 	return &WebPayment{client: newClient(creds)}
 }
 
@@ -33,7 +33,7 @@ func NewWebPayment(creds *Credential) *WebPayment {
 // NewWebPaymentWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // Web Payment のクライアントを返す.
 func NewWebPaymentWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *WebPayment {
 	return &WebPayment{client: newClientWithHTTPClient(creds, client)}

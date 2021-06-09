@@ -20,13 +20,13 @@ import (
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/direct_debit
 type NativePayment struct {
 	client *opaClient
-	creds  *Credential
+	creds  *Credentials
 }
 
 // NewNativePayment returns a client for Native Payment.
 //
 // NewNativePayment は Native Payment のクライアントを返す.
-func NewNativePayment(creds *Credential) *NativePayment {
+func NewNativePayment(creds *Credentials) *NativePayment {
 	return &NativePayment{
 		client: newClient(creds),
 		creds:  creds,
@@ -39,7 +39,7 @@ func NewNativePayment(creds *Credential) *NativePayment {
 // NewNativePaymentWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // Native Payment のクライアントを返す.
 func NewNativePaymentWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *NativePayment {
 	return &NativePayment{

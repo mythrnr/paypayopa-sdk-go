@@ -20,13 +20,13 @@ import (
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/preauth_capture
 type PreAuthCapture struct {
 	client *opaClient
-	creds  *Credential
+	creds  *Credentials
 }
 
 // NewPreAuthCapture returns a client for PreAuth & Capture.
 //
 // NewPreAuthCapture は PreAuth & Capture のクライアントを返す.
-func NewPreAuthCapture(creds *Credential) *PreAuthCapture {
+func NewPreAuthCapture(creds *Credentials) *PreAuthCapture {
 	return &PreAuthCapture{
 		client: newClient(creds),
 		creds:  creds,
@@ -39,7 +39,7 @@ func NewPreAuthCapture(creds *Credential) *PreAuthCapture {
 // NewPreAuthCaptureWithHTTPClient は設定済みの *http.Client を用いて通信を行う
 // PreAuth & Capture のクライアントを返す.
 func NewPreAuthCaptureWithHTTPClient(
-	creds *Credential,
+	creds *Credentials,
 	client *http.Client,
 ) *PreAuthCapture {
 	return &PreAuthCapture{

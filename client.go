@@ -20,11 +20,11 @@ import (
 // opaClient は PayPay API へのリクエスト/レスポンスのハンドリングを行うクライアント.
 type opaClient struct{ http *http.Client }
 
-func newClient(creds *Credential) *opaClient {
+func newClient(creds *Credentials) *opaClient {
 	return newClientWithHTTPClient(creds, &http.Client{})
 }
 
-func newClientWithHTTPClient(creds *Credential, hc *http.Client) *opaClient {
+func newClientWithHTTPClient(creds *Credentials, hc *http.Client) *opaClient {
 	if hc == nil {
 		panic("*http.Client must not be nil")
 	}
@@ -213,18 +213,18 @@ func getTimeout(ctx context.Context) time.Duration {
 }
 
 type authInterceptor struct {
-	creds *Credential
+	creds *Credentials
 	next  http.RoundTripper
 }
 
 var _ http.RoundTripper = (*authInterceptor)(nil)
 
 func newAuthenticateInterceptor(
-	creds *Credential,
+	creds *Credentials,
 	next http.RoundTripper,
 ) http.RoundTripper {
 	if creds == nil {
-		panic("*Credential must not be nil")
+		panic("*Credentials must not be nil")
 	}
 
 	return &authInterceptor{creds: creds, next: next}
