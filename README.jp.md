@@ -55,11 +55,11 @@ Web Payment や Native Payment などのインテグレーションごとに
 
 ### 資格情報の生成
 
-- `paypayopa.NewCredential` を使い, 開発者ページで生成した API キーなどを設定する.
+- `paypayopa.NewCredentials` を使い, 開発者ページで生成した API キーなどを設定する.
 - `paypayopa.Env***` を指定し, 接続先を切り替える.
 
 ```go
-creds := paypayopa.NewCredential(
+creds := paypayopa.NewCredentials(
     paypayopa.EnvSandbox,
     "YOUR_API_KEY",
     "YOUR_API_KEY_SECRET",
@@ -82,7 +82,7 @@ import (
 )
 
 func main() {
-    creds := paypayopa.NewCredential(
+    creds := paypayopa.NewCredentials(
         paypayopa.EnvSandbox,
         "YOUR_API_KEY",
         "YOUR_API_KEY_SECRET",

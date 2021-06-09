@@ -55,11 +55,11 @@ Available integration here.
 
 ### Create Credentials
 
-- Use `paypayopa.NewCredential` , and set the API key generated on the developer page.
+- Use `paypayopa.NewCredentials` , and set the API key generated on the developer page.
 - Use `paypayopa.Env***` to switch the connection destination.
 
 ```go
-creds := paypayopa.NewCredential(
+creds := paypayopa.NewCredentials(
     paypayopa.EnvSandbox,
     "YOUR_API_KEY",
     "YOUR_API_KEY_SECRET",
@@ -82,7 +82,7 @@ import (
 )
 
 func main() {
-    creds := paypayopa.NewCredential(
+    creds := paypayopa.NewCredentials(
         paypayopa.EnvSandbox,
         "YOUR_API_KEY",
         "YOUR_API_KEY_SECRET",
