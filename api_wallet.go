@@ -45,6 +45,7 @@ func checkUserWalletBalance(
 		"/v2/wallet/check_balance?"+url.Values{
 			"userAuthorizationId": []string{req.UserAuthorizationID},
 			"amount": []string{
+				// nolint:gomnd
 				strconv.FormatInt(int64(req.Amount), 10),
 			},
 			"currency":    []string{string(req.Currency)},

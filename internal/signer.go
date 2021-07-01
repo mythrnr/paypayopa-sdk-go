@@ -122,6 +122,7 @@ func (a *Signer) macData() []byte {
 		a.uri,
 		a.method,
 		a.nonce,
+		// nolint:gomnd
 		strconv.FormatInt(a.epoch, 10),
 		a.ContentType(),
 		a.hash(),
@@ -161,6 +162,7 @@ func (a *Signer) Sign() string {
 		a.apiKey,
 		a.base64hmacString(),
 		a.nonce,
+		// nolint:gomnd
 		strconv.FormatInt(a.epoch, 10),
 		a.hash(),
 	}
