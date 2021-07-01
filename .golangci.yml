@@ -27,6 +27,14 @@ linters-settings:
       - "G401"
       - "G404"
       - "G501"
+  gomnd:
+    settings:
+      mnd:
+        ignored-functions:
+          - "strconv.FormatInt"
+          - "strconv.ParseFloat"
+          - "strconv.ParseInt"
+          - "strconv.ParseUint"
   ifshort:
     max-decl-lines: 1
     max-decl-chars: 60
