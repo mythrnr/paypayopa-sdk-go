@@ -1,7 +1,10 @@
 package paypayopa
 
 import (
-	jwt "github.com/dgrijalva/jwt-go/v4"
+	"errors"
+	"fmt"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type AuthorizationResponseToken struct {
@@ -14,6 +17,8 @@ type AuthorizationResponseToken struct {
 	UserAuthorizationID string
 	ReferenceID         string
 }
+
+var ErrJWTAudienceNotMatch = errors.New("jwt: audience not match")
 
 type rawToken struct {
 	Result              UserAuthorizeResult `json:"result"`
@@ -30,28 +35,28 @@ func decodeAuthorizationResponseToken(
 	token string,
 ) (*AuthorizationResponseToken, error) {
 	claims := rawToken{}
-	_, err := jwt.ParseWithClaims(
-		token,
-		&claims,
+
+	if _, err := jwt.ParseWithClaims(
+		token, &claims,
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(creds.apiKeySecret), nil
 		},
-		jwt.WithAudience(creds.merchantID),
-	)
+	); err != nil {
+		return nil, fmt.Errorf("jwt: invalid: %w", err)
+	}
 
-	aud := ""
-	if 0 < len(claims.Audience) {
-		aud = claims.Audience[0]
+	if creds.merchantID != claims.Audience {
+		return nil, ErrJWTAudienceNotMatch
 	}
 
 	return &AuthorizationResponseToken{
-		Audience:            aud,
+		Audience:            claims.Audience,
 		Issuer:              claims.Issuer,
-		ExpiresAt:           claims.ExpiresAt.Unix(),
+		ExpiresAt:           claims.ExpiresAt,
 		Result:              claims.Result,
 		ProfileIdentifier:   claims.ProfileIdentifier,
 		Nonce:               claims.Nonce,
 		UserAuthorizationID: claims.UserAuthorizationID,
 		ReferenceID:         claims.ReferenceID,
-	}, err
+	}, nil
 }
