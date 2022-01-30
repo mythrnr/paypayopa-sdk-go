@@ -30,11 +30,7 @@ linters-settings:
   gomnd:
     settings:
       mnd:
-        ignored-functions:
-          - "strconv.FormatInt"
-          - "strconv.ParseFloat"
-          - "strconv.ParseInt"
-          - "strconv.ParseUint"
+        ignored-functions: "strconv.FormatInt,strconv.ParseFloat,strconv.ParseInt,strconv.ParseUint"
   ifshort:
     max-decl-lines: 1
     max-decl-chars: 60
@@ -49,14 +45,18 @@ linters-settings:
       - "someword"
   nestif:
     min-complexity: 4
+  staticcheck:
+    go: "1.17"
   testpackage:
     skip-regexp: "_inner_test.go"
 
 linters:
   disable:
+    - "contextcheck"
     - "exhaustivestruct"
     - "gofumpt"
     - "tagliatelle"
+    - "varnamelen"
     - "wrapcheck"
     # ---- deprecated ---- #
     - "golint"
@@ -82,6 +82,7 @@ issues:
         - "errcheck"
         - "funlen"
         - "goerr113"
+        - "maintidx"
     - path: "example"
       linters:
         - "gomnd"

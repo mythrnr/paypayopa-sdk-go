@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_createQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -103,7 +103,7 @@ func Test_createQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_BAD_REQUEST",
 						"message": "Dynamic QR bad request error",
@@ -177,7 +177,7 @@ func Test_deleteQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -218,7 +218,7 @@ func Test_deleteQRCode(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusNotFound),
 				StatusCode: http.StatusNotFound,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_NOT_FOUND",
 						"message": "Dynamic qr code not found",
@@ -289,7 +289,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -401,7 +401,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusNotFound),
 				StatusCode: http.StatusNotFound,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_PAYMENT_NOT_FOUND",
 						"message": "Dynamic QR payment not found",

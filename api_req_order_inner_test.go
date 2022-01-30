@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_createPendingPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusCreated),
 				StatusCode: http.StatusCreated,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -96,7 +96,7 @@ func Test_createPendingPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "DUPLICATE_REQUEST_ORDER",
 						"message": "Request order with same payment ID exists",
@@ -170,7 +170,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -211,7 +211,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusNotFound),
 				StatusCode: http.StatusNotFound,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "REQUEST_ORDER_NOT_FOUND",
 						"message": "Request order not in valid state",
@@ -282,7 +282,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -372,7 +372,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INVALID_PARAMS",
 						"message": "The set parameter is invalid",

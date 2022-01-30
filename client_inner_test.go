@@ -5,7 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"testing"
@@ -270,7 +270,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
-				Body:       ioutil.NopCloser(bytes.NewBufferString(`invalid-json`)),
+				Body:       io.NopCloser(bytes.NewBufferString(`invalid-json`)),
 			}, nil)
 
 		client := newClientWithHTTPClient(
@@ -306,7 +306,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -353,7 +353,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -402,7 +402,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -450,7 +450,7 @@ func Test_opaClient_Do(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -476,7 +476,7 @@ func Test_opaClient_Do(t *testing.T) {
 			context.Background(),
 			http.MethodPost,
 			"/test",
-			ioutil.NopCloser(bytes.NewBufferString(`{ "test": "value" }`)),
+			io.NopCloser(bytes.NewBufferString(`{ "test": "value" }`)),
 		)
 
 		res := struct {

@@ -6,7 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strconv"
 	"strings"
@@ -64,7 +64,7 @@ func NewSigner(
 		return nil, fmt.Errorf("failed to read body: %w", err)
 	}
 
-	if a.body, err = ioutil.ReadAll(b); err != nil {
+	if a.body, err = io.ReadAll(b); err != nil {
 		return nil, fmt.Errorf("failed to read body: %w", err)
 	}
 

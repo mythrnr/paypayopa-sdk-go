@@ -1,9 +1,10 @@
-.PHONY: lint mock test test-json tidy
-.SILENT: test-json
-
+.PHONY: lint
+.SILENT: lint
 lint:
 	golangci-lint run ./...
 
+.PHONY: mock
+.SILENT: mock
 mock:
 	mockery \
 		--case=underscore \
@@ -29,11 +30,17 @@ mock:
 		--name=Marshaler \
 		--output=internal/mocks
 
+.PHONY: test
+.SILENT: test
 test:
 	go test -cover ./...
 
+.PHONY: test-json
+.SILENT: test-json
 test-json:
 	go test -cover -json ./...
 
+.PHONY: tidy
+.SILENT: tidy
 tidy:
 	go mod tidy

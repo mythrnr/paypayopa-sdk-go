@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
@@ -25,7 +25,7 @@ func Test_createPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -114,7 +114,7 @@ func Test_createPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INVALID_REQUEST_PARAMS",
 						"message": "Invalid request params",
@@ -188,7 +188,7 @@ func Test_cancelPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "REQUEST_ACCEPTED",
 						"message": "Request accepted",
@@ -229,7 +229,7 @@ func Test_cancelPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "ORDER_NOT_REVERSIBLE",
 						"message": "Order cannot be reversed",
@@ -300,7 +300,7 @@ func Test_getPaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -389,7 +389,7 @@ func Test_getPaymentDetails(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_PAYMENT_NOT_FOUND",
 						"message": "Dynamic QR payment not found",
@@ -463,7 +463,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -554,7 +554,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusBadRequest),
 				StatusCode: http.StatusBadRequest,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "REQUEST_ORDER_NOT_FOUND",
 						"message": "Request order not found",
@@ -632,7 +632,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -685,7 +685,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -734,7 +734,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusInternalServerError),
 				StatusCode: http.StatusInternalServerError,
-				Body: ioutil.NopCloser(bytes.NewBufferString(`{
+				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",

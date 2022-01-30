@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"time"
@@ -164,7 +163,7 @@ func (c *opaClient) Do(req *http.Request, res interface{}) (*ResultInfo, error) 
 
 	defer rs.Body.Close()
 
-	b, err := ioutil.ReadAll(rs.Body)
+	b, err := io.ReadAll(rs.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
