@@ -8,9 +8,9 @@
 
 ## Status
 
-[![Check codes](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check_code.yml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check_code.yml)
+[![Check codes](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check_code.yaml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check_code.yaml)
 
-[![Create Release](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/release.yml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/release.yml)
+[![Create Release](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/release.yaml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/release.yaml)
 
 ## Requirements
 
