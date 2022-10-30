@@ -41,7 +41,7 @@ type QRCodeResponse struct {
 	RequestedAt         int64                        `json:"requestedAt"`
 	RedirectURL         string                       `json:"redirectUrl"`
 	RedirectType        RedirectType                 `json:"redirectType"`
-	Isauthorization     bool                         `json:"isAuthorization"`
+	IsAuthorization     bool                         `json:"isAuthorization"`
 	Authorizationexpiry *int64                       `json:"authorizationExpiry"`
 }
 

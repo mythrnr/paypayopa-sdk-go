@@ -9,11 +9,11 @@ import (
 //
 // RequestMoney は PayPay の支払リクエスト機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/pendingpayment
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments
 //
@@ -53,7 +53,7 @@ func NewRequestMoneyWithHTTPClient(
 //
 // CreatePendingPayment はユーザーに支払いを求める通知を送信する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/createPayment
 //
@@ -69,7 +69,7 @@ func (r *RequestMoney) CreatePendingPayment(
 //
 // GetPaymentDetails は決済の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/getPaymentDetails
 //
@@ -85,7 +85,7 @@ func (r *RequestMoney) GetPaymentDetails(
 //
 // CancelPendingOrder は保留中の支払いを削除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/cancelPendingOrder
 //
@@ -101,7 +101,7 @@ func (r *RequestMoney) CancelPendingOrder(
 //
 // RefundPayment は返金を行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/refundPayment
 //
@@ -117,7 +117,7 @@ func (r *RequestMoney) RefundPayment(
 //
 // GetRefundDetails は返金の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/getRefundDetails
 //
@@ -134,7 +134,7 @@ func (r *RequestMoney) GetRefundDetails(
 //
 // CreateAccountLinkQRCode はアカウントリンクQRを作成し, ユーザーに表示する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html#operation/createQRSession
 //
@@ -150,7 +150,7 @@ func (r *RequestMoney) CreateAccountLinkQRCode(
 //
 // GetMaskedUserProfile はマスクされたユーザーの電話番号を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/pending_payments#operation/getMaskedUserProfile
 //
@@ -167,7 +167,7 @@ func (r *RequestMoney) GetMaskedUserProfile(
 //
 // DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
 //

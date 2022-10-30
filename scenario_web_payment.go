@@ -9,11 +9,11 @@ import (
 //
 // WebPayment は PayPay のウェブペイメント機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/webpayment
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier
 //
@@ -43,7 +43,7 @@ func NewWebPaymentWithHTTPClient(
 //
 // CreateQRCode は支払い用の QR コードを作成する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/createQRCode
 //
@@ -59,7 +59,7 @@ func (w *WebPayment) CreateQRCode(
 //
 // DeleteQRCode は作成済みの QR コードを削除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/deleteQRCode
 //
@@ -75,7 +75,7 @@ func (w *WebPayment) DeleteQRCode(
 //
 // GetPaymentDetails は決済の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/getPaymentDetails
 //
@@ -91,7 +91,7 @@ func (w *WebPayment) GetPaymentDetails(
 //
 // CancelPayment は支払いのキャンセルをする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/cancelPayment
 //
@@ -108,7 +108,7 @@ func (w *WebPayment) CancelPayment(
 //
 // CapturePaymentAuthorization は支払い承認を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/capturePaymentAuth
 //
@@ -126,7 +126,7 @@ func (w *WebPayment) CapturePaymentAuthorization(
 // RevertPaymentAuthorization はユーザーが注文のキャンセルをした場合に
 // 支払い承認の取り消しをする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/revertAuth
 //
@@ -142,7 +142,7 @@ func (w *WebPayment) RevertPaymentAuthorization(
 //
 // RefundPayment は返金を行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/refundPayment
 //
@@ -158,7 +158,7 @@ func (w *WebPayment) RefundPayment(
 //
 // GetRefundDetails は返金の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#operation/getRefundDetails
 //

@@ -1,10 +1,16 @@
+ifndef VERBOSE
+MAKEFLAGS += --silent
+endif
+
+.PHONY: fmt
+fmt:
+	go fmt ./...
+
 .PHONY: lint
-.SILENT: lint
 lint:
 	golangci-lint run ./...
 
 .PHONY: mock
-.SILENT: mock
 mock:
 	mockery \
 		--case=underscore \
@@ -30,17 +36,27 @@ mock:
 		--name=Marshaler \
 		--output=internal/mocks
 
+.PHONY: nancy
+nancy:
+	go list -json -m all | nancy sleuth
+
+.PHONY: spell-check
+spell-check:
+	# npm install -g cspell@latest
+	cspell lint --config .vscode/cspell.json ".*"; \
+	cspell lint --config .vscode/cspell.json "**/.*"; \
+	cspell lint --config .vscode/cspell.json ".{github,vscode}/**/*"; \
+	cspell lint --config .vscode/cspell.json ".{github,vscode}/**/.*"; \
+	cspell lint --config .vscode/cspell.json "**"
+
 .PHONY: test
-.SILENT: test
 test:
 	go test -cover ./...
 
 .PHONY: test-json
-.SILENT: test-json
 test-json:
 	go test -cover -json ./...
 
 .PHONY: tidy
-.SILENT: tidy
 tidy:
 	go mod tidy

@@ -9,11 +9,11 @@ import (
 //
 // PreAuthCapture は PayPay の都度課金（出荷売上）機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/preauthcapture
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture
 //
@@ -53,12 +53,13 @@ func NewPreAuthCaptureWithHTTPClient(
 //
 // ConsultExpectedCashbackInfo は注文する前に, 予定のキャッシュバック情報を参照する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/consultExpectedCashbackInfo
 //
-// nolint:lll
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/preauth_capture#operation/consultExpectedCashbackInfo
+//
+//nolint:lll
 func (p *PreAuthCapture) ConsultExpectedCashbackInfo(
 	ctx context.Context,
 	req *ConsultExpectedCashbackInfoPayload,
@@ -72,7 +73,7 @@ func (p *PreAuthCapture) ConsultExpectedCashbackInfo(
 // CreatePaymentAuthorization は決済金額をブロックするための
 // 支払いAuthorizationを作成する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/createAuth
 //
@@ -88,7 +89,7 @@ func (p *PreAuthCapture) CreatePaymentAuthorization(
 //
 // GetPaymentDetails は決済の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getPaymentDetails
 //
@@ -104,7 +105,7 @@ func (p *PreAuthCapture) GetPaymentDetails(
 //
 // CancelPaymentAuthorization は支払リクエストのキャンセルを行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/jp/v1.0/preauth_capture#operation/cancelPayment
 //
@@ -121,7 +122,7 @@ func (p *PreAuthCapture) CancelPaymentAuthorization(
 // CapturePaymentAuthorization は事前にユーザーの残高からブロックしていた
 // 決済金額をキャプチャ（決済）する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/capturePaymentAuth
 //
@@ -133,12 +134,12 @@ func (p *PreAuthCapture) CapturePaymentAuthorization(
 	return capturePaymentAuthorization(ctx, p.client, req)
 }
 
-// RevertPaymentAuthorization canels the payment authorization.
+// RevertPaymentAuthorization cancels the payment authorization.
 //
 // RevertPaymentAuthorization はユーザーの残高から決済金額を
 // ブロックしている状態をキャンセルする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/revertAuth
 //
@@ -154,7 +155,7 @@ func (p *PreAuthCapture) RevertPaymentAuthorization(
 //
 // RefundPayment は返金を行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/refundPayment
 //
@@ -170,7 +171,7 @@ func (p *PreAuthCapture) RefundPayment(
 //
 // GetRefundDetails は返金の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getRefundDetails
 //
@@ -186,7 +187,7 @@ func (p *PreAuthCapture) GetRefundDetails(
 //
 // CreateTopupQRCode はトップアップ用のQRコードを作成する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/createTopUpQRCode
 //
@@ -202,7 +203,7 @@ func (p *PreAuthCapture) CreateTopupQRCode(
 //
 // GetTopupDetails はトップアップ用のQRコードの詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getTopUpQRDetails
 //
@@ -218,7 +219,7 @@ func (p *PreAuthCapture) GetTopupDetails(
 //
 // DeleteTopupQRCode はトップアップ用のQRコードを削除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/deleteTopUpQrCode
 //
@@ -234,7 +235,7 @@ func (p *PreAuthCapture) DeleteTopupQRCode(
 //
 // GetUserWalletBalance はユーザーの残高を参照する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getBalance
 //
@@ -251,7 +252,7 @@ func (p *PreAuthCapture) GetUserWalletBalance(
 //
 // CheckUserWalletBalance はユーザーが支払いをするための十分な残高があるかを確認する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/checkWalletBalance
 //
@@ -268,7 +269,7 @@ func (p *PreAuthCapture) CheckUserWalletBalance(
 //
 // CreateAccountLinkQRCode はアカウントリンクQRを作成し, ユーザーに表示する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html#operation/createQRSession
 //
@@ -284,7 +285,7 @@ func (p *PreAuthCapture) CreateAccountLinkQRCode(
 //
 // UnlinkUser はクライアントからユーザーのリンクを解除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/unlinkUser
 //
@@ -300,7 +301,7 @@ func (p *PreAuthCapture) UnlinkUser(
 //
 // GetUserAuthorizationStatus はユーザー認可状態を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getUserAuthorizationStatus
 //
@@ -316,7 +317,7 @@ func (p *PreAuthCapture) GetUserAuthorizationStatus(
 //
 // GetMaskedUserProfile はマスクされたユーザーの電話番号を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/preauth_capture#operation/getMaskedUserProfile
 //
@@ -333,7 +334,7 @@ func (p *PreAuthCapture) GetMaskedUserProfile(
 //
 // DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
 //

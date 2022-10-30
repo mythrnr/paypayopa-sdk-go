@@ -9,11 +9,11 @@ import (
 //
 // NativePayment は PayPay のネイティブペイメント機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/nativepayment
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit
 //
@@ -53,7 +53,7 @@ func NewNativePaymentWithHTTPClient(
 //
 // ConsultExpectedCashbackInfo は注文する前に, 予定のキャッシュバック情報を参照する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/consultExpectedCashbackInfo
 //
@@ -69,7 +69,7 @@ func (n *NativePayment) ConsultExpectedCashbackInfo(
 //
 // CreatePayment は決済リクエストを作成して送金を開始する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/consultExpectedCashbackInfo
 //
@@ -85,7 +85,7 @@ func (n *NativePayment) CreatePayment(
 //
 // GetPaymentDetails は決済の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getPaymentDetails
 //
@@ -101,7 +101,7 @@ func (n *NativePayment) GetPaymentDetails(
 //
 // CancelPayment は支払いのキャンセルをする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/cancelPayment
 //
@@ -117,7 +117,7 @@ func (n *NativePayment) CancelPayment(
 //
 // RefundPayment は返金を行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/refundPayment
 //
@@ -133,7 +133,7 @@ func (n *NativePayment) RefundPayment(
 //
 // GetRefundDetails は返金の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getRefundDetails
 //
@@ -149,7 +149,7 @@ func (n *NativePayment) GetRefundDetails(
 //
 // CreateTopupQRCode はトップアップ用のQRコードを作成する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/createTopUpQRCode
 //
@@ -165,7 +165,7 @@ func (n *NativePayment) CreateTopupQRCode(
 //
 // GetTopupDetails はトップアップ用のQRコードの詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getTopUpQRDetails
 //
@@ -181,7 +181,7 @@ func (n *NativePayment) GetTopupDetails(
 //
 // DeleteTopupQRCode はトップアップ用のQRコードを削除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/deleteTopUpQrCode
 //
@@ -197,7 +197,7 @@ func (n *NativePayment) DeleteTopupQRCode(
 //
 // GetUserWalletBalance はユーザーの残高を参照する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getBalance
 //
@@ -214,7 +214,7 @@ func (n *NativePayment) GetUserWalletBalance(
 //
 // CheckUserWalletBalance はユーザーが支払いをするための十分な残高があるかを確認する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/checkWalletBalance
 //
@@ -231,7 +231,7 @@ func (n *NativePayment) CheckUserWalletBalance(
 //
 // CreateAccountLinkQRCode はアカウントリンクQRを作成し, ユーザーに表示する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html#operation/createQRSession
 //
@@ -247,7 +247,7 @@ func (n *NativePayment) CreateAccountLinkQRCode(
 //
 // UnlinkUser はクライアントからユーザーのリンクを解除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/unlinkUser
 //
@@ -263,7 +263,7 @@ func (n *NativePayment) UnlinkUser(
 //
 // GetUserAuthorizationStatus はユーザー認可状態を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getUserAuthorizationStatus
 //
@@ -279,7 +279,7 @@ func (n *NativePayment) GetUserAuthorizationStatus(
 //
 // GetMaskedUserProfile はマスクされたユーザーの電話番号を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/direct_debit#operation/getMaskedUserProfile
 //
@@ -296,7 +296,7 @@ func (n *NativePayment) GetMaskedUserProfile(
 //
 // DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
 //

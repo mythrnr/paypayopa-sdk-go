@@ -121,7 +121,7 @@ type TopupQRCodeResponse struct {
 	RequestedAt         int64            `json:"requestedAt"`
 	RedirectType        RedirectType     `json:"redirectType"`
 	RedirectURL         string           `json:"redirectUrl"`
-	UserAagent          string           `json:"userAgent"`
+	UserAgent           string           `json:"userAgent"`
 }
 
 func createTopupQRCode(

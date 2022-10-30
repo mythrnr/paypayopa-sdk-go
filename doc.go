@@ -5,7 +5,7 @@ Package paypayopa は, PayPay Open Payment API を使用するための SDK を�
 
 See: https://developer.paypay.ne.jp
 
-Example to create and delete QR code using Web Payment
+# Example to create and delete QR code using Web Payment
 
 - For more example, see https://github.com/mythrnr/paypay-sample-ecommerce-backend-go
 

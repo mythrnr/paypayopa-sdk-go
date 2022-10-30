@@ -10,11 +10,11 @@ import (
 //
 // ContinuousPayment は PayPay の継続課金機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/continuouspayment
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments
 //
@@ -54,7 +54,7 @@ func NewContinuousPaymentWithHTTPClient(
 //
 // CreateContinuousPayment は継続課金リクエストを作成して送金を開始する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/createPayment
 //
@@ -70,7 +70,7 @@ func (c *ContinuousPayment) CreateContinuousPayment(
 //
 // GetPaymentDetails は決済の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/getPaymentDetails
 //
@@ -86,7 +86,7 @@ func (c *ContinuousPayment) GetPaymentDetails(
 //
 // CancelPayment は支払いのキャンセルをする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/cancelPayment
 //
@@ -102,7 +102,7 @@ func (c *ContinuousPayment) CancelPayment(
 //
 // RefundPayment は返金を行う.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/refundPayment
 //
@@ -118,7 +118,7 @@ func (c *ContinuousPayment) RefundPayment(
 //
 // GetRefundDetails は返金の詳細を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/getRefundDetails
 //
@@ -135,7 +135,7 @@ func (c *ContinuousPayment) GetRefundDetails(
 //
 // CreateAccountLinkQRCode はアカウントリンクQRを作成し, ユーザーに表示する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html#operation/createQRSession
 //
@@ -151,7 +151,7 @@ func (c *ContinuousPayment) CreateAccountLinkQRCode(
 //
 // UnlinkUser はクライアントからユーザーのリンクを解除する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/unlinkUser
 //
@@ -167,12 +167,13 @@ func (c *ContinuousPayment) UnlinkUser(
 //
 // GetUserAuthorizationStatus はユーザー認可状態を取得する.
 //
-// API Docs
+// # API Docs
 //
-// nolint:lll
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/getUserAuthorizationStatus
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/continuous_payments#operation/getUserAuthorizationStatus
+//
+//nolint:lll
 func (c *ContinuousPayment) GetUserAuthorizationStatus(
 	ctx context.Context,
 	userAuthorizationID string,
@@ -184,7 +185,7 @@ func (c *ContinuousPayment) GetUserAuthorizationStatus(
 //
 // GetMaskedUserProfile はマスクされたユーザーの電話番号を取得する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/continuous_payments#operation/getMaskedUserProfile
 //
@@ -201,7 +202,7 @@ func (c *ContinuousPayment) GetMaskedUserProfile(
 //
 // DecodeResponseToken はユーザーの認可の結果の JWT をデコードして返す.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/account_link.html
 //

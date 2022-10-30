@@ -6,11 +6,11 @@ import "net/http"
 //
 // AppInvoke は PayPay のアプリコール機能の API を提供する.
 //
-// Docs
+// # Docs
 //
 // https://developer.paypay.ne.jp/products/docs/appinvoke
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/appinvoke
 //

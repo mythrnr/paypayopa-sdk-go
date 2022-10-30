@@ -25,7 +25,7 @@ const (
 // Signer は API の認証情報を生成するための構造体.
 // リクエストごとに作成して破棄する.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#tag/API
 //
@@ -85,7 +85,7 @@ func (a *Signer) ContentType() string {
 // hash は認証ヘッダ作成の Step 1 の処理.
 // リクエストごとに使い捨てる為, hash はキャッシュする.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
@@ -112,7 +112,7 @@ func (a *Signer) hash() string {
 //
 // macData は認証ヘッダ作成の Step 2 の処理.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
@@ -134,7 +134,7 @@ func (a *Signer) macData() []byte {
 //
 // base64hmacString は認証ヘッダ作成の Step 3 の処理.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //
@@ -150,7 +150,7 @@ func (a *Signer) base64hmacString() string {
 //
 // Sign は認証ヘッダ作成の Step 4 の処理.
 //
-// API Docs
+// # API Docs
 //
 // EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
 //

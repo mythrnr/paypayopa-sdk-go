@@ -325,7 +325,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusAccepted),
 				StatusCode: http.StatusAccepted,
-				// nolint:lll
+				//nolint:lll
 				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "USER_CONFIRMATION_REQUIRED",
