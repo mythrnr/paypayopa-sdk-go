@@ -21,27 +21,37 @@ lint:
 
 .PHONY: mock
 mock:
-	mockery \
-		--case=underscore \
-		--inpackage \
-		--name=.* \
-		--output .
+	docker pull vektra/mockery:latest > /dev/null
 
-	mockery \
+	# docker run --rm \
+	# 	-v $(shell pwd):/src \
+	# 	-w /src vektra/mockery \
+	# 	--case=underscore \
+	# 	--inpackage \
+	# 	--name=.* \
+	# 	--output .
+
+	docker run --rm \
+		-v $(shell pwd):/src \
+		-w /src vektra/mockery \
 		--case=underscore \
-		--dir=$(shell go env GOROOT)/src/net/http \
+		--dir=/usr/local/go/src/net/http \
 		--name=RoundTripper \
 		--output=internal/mocks
 
-	mockery \
+	docker run --rm \
+		-v $(shell pwd):/src \
+		-w /src vektra/mockery \
 		--case=underscore \
-		--dir=$(shell go env GOROOT)/src/io \
+		--dir=/usr/local/go/src/io \
 		--name=ReadCloser \
 		--output=internal/mocks
 
-	mockery \
+	docker run --rm \
+		-v $(shell pwd):/src \
+		-w /src vektra/mockery \
 		--case=underscore \
-		--dir=$(shell go env GOROOT)/src/encoding/json \
+		--dir=/usr/local/go/src/encoding/json \
 		--name=Marshaler \
 		--output=internal/mocks
 
