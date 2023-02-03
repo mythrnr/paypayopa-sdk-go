@@ -71,6 +71,7 @@
     "unimported",
     "varcheck",
     "varnamelen",
+    "vektra",
     "wastedassign",
     "wrapcheck"
   ]
