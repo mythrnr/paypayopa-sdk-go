@@ -17,6 +17,7 @@
 ## Requirements
 
 - Go 1.13 以上.
+- Docker (開発時)
 
 ### 開発に必要
 
