@@ -2,29 +2,33 @@ ifndef VERBOSE
 MAKEFLAGS += --silent
 endif
 
+pkg ?= ./...
+pwd = $(shell pwd)
+
 .PHONY: clean
 clean:
 	rm -rf .cache/*
 
 .PHONY: fmt
 fmt:
-	go fmt ./...
+	go fmt $(pkg)
 
 .PHONY: lint
 lint:
 	docker pull golangci/golangci-lint:latest > /dev/null \
 	&& mkdir -p .cache/golangci-lint \
 	&& docker run --rm \
-		-v $(shell pwd):/app \
-		-v $(shell pwd)/.cache:/root/.cache \
-		-w /app golangci/golangci-lint:latest golangci-lint run ./...
+		-v $(pwd):/app \
+		-v $(pwd)/.cache:/root/.cache \
+		-w /app \
+		golangci/golangci-lint:latest golangci-lint run $(pkg)
 
 .PHONY: mock
 mock:
 	docker pull vektra/mockery:latest > /dev/null
 
 	# docker run --rm \
-	# 	-v $(shell pwd):/src \
+	# 	-v $(pwd):/src \
 	# 	-w /src vektra/mockery \
 	# 	--case=underscore \
 	# 	--inpackage \
@@ -32,7 +36,7 @@ mock:
 	# 	--output .
 
 	docker run --rm \
-		-v $(shell pwd):/src \
+		-v $(pwd):/src \
 		-w /src vektra/mockery \
 		--case=underscore \
 		--dir=/usr/local/go/src/net/http \
@@ -40,7 +44,7 @@ mock:
 		--output=internal/mocks
 
 	docker run --rm \
-		-v $(shell pwd):/src \
+		-v $(pwd):/src \
 		-w /src vektra/mockery \
 		--case=underscore \
 		--dir=/usr/local/go/src/io \
@@ -48,7 +52,7 @@ mock:
 		--output=internal/mocks
 
 	docker run --rm \
-		-v $(shell pwd):/src \
+		-v $(pwd):/src \
 		-w /src vektra/mockery \
 		--case=underscore \
 		--dir=/usr/local/go/src/encoding/json \
@@ -58,24 +62,24 @@ mock:
 .PHONY: nancy
 nancy:
 	docker pull sonatypecommunity/nancy:latest > /dev/null \
-	&& go list -buildvcs=false -deps -json ./... \
+	&& go list -buildvcs=false -deps -json $(pkg) \
 	| docker run --rm -i sonatypecommunity/nancy:latest sleuth
 
 .PHONY: spell-check
 spell-check:
 	docker pull ghcr.io/streetsidesoftware/cspell:latest > /dev/null \
 	&& docker run --rm \
-		-v $(shell pwd):/workdir \
+		-v $(pwd):/workdir \
 		ghcr.io/streetsidesoftware/cspell:latest \
 			--config .vscode/cspell.json "**"
 
 .PHONY: test
 test:
-	go test -cover ./...
+	go test -cover $(pkg)
 
 .PHONY: test-json
 test-json:
-	go test -cover -json ./...
+	go test -cover -json $(pkg)
 
 .PHONY: tidy
 tidy:
