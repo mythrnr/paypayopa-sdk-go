@@ -208,7 +208,7 @@ func (c *ContinuousPayment) GetMaskedUserProfile(
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
 func (c *ContinuousPayment) DecodeResponseToken(
-	ctx context.Context,
+	_ context.Context,
 	token string,
 ) (*AuthorizationResponseToken, error) {
 	return decodeAuthorizationResponseToken(c.creds, token)

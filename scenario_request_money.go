@@ -173,7 +173,7 @@ func (r *RequestMoney) GetMaskedUserProfile(
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
 func (r *RequestMoney) DecodeResponseToken(
-	ctx context.Context,
+	_ context.Context,
 	token string,
 ) (*AuthorizationResponseToken, error) {
 	return decodeAuthorizationResponseToken(r.creds, token)

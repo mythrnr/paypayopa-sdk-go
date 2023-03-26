@@ -340,7 +340,7 @@ func (p *PreAuthCapture) GetMaskedUserProfile(
 //
 // JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/account_link.html
 func (p *PreAuthCapture) DecodeResponseToken(
-	ctx context.Context,
+	_ context.Context,
 	token string,
 ) (*AuthorizationResponseToken, error) {
 	return decodeAuthorizationResponseToken(p.creds, token)
