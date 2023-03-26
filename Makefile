@@ -73,6 +73,14 @@ spell-check:
 		ghcr.io/streetsidesoftware/cspell:latest \
 			--config .vscode/cspell.json "**"
 
+.PHONY: release
+release:
+	if [ "$(tag)" = "" ]; then \
+		echo "tag name is required."; \
+		exit 1; \
+	fi \
+	&& gh release create $(tag) --generate-notes --target master
+
 .PHONY: test
 test:
 	go test -cover $(pkg)
