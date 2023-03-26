@@ -27,14 +27,6 @@ lint:
 mock:
 	docker pull vektra/mockery:latest > /dev/null
 
-	# docker run --rm \
-	# 	-v $(pwd):/src \
-	# 	-w /src vektra/mockery \
-	# 	--case=underscore \
-	# 	--inpackage \
-	# 	--name=.* \
-	# 	--output .
-
 	docker run --rm \
 		-v $(pwd):/src \
 		-w /src vektra/mockery \
