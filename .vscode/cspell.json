@@ -38,6 +38,7 @@
     "golangci",
     "golint",
     "gomnd",
+    "gomod",
     "gomodcache",
     "gosec",
     "guyarb",
