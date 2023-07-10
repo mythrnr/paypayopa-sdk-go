@@ -24,6 +24,7 @@
     "cyclop",
     "deadcode",
     "deeplink",
+    "depguard",
     "dupl",
     "errcheck",
     "exhaustivestruct",
