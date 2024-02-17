@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const walletBalancePath = "/v6/wallet/balance"
+
 type CheckUserWalletBalancePayload struct {
 	GetUserWalletBalancePayload
 	Amount int
@@ -70,7 +72,7 @@ func getUserWalletBalance(
 	res := &UserWalletBalanceResponse{}
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
-		"/v6/wallet/balance?"+url.Values{
+		walletBalancePath+"?"+url.Values{
 			"userAuthorizationId": []string{req.UserAuthorizationID},
 			"currency":            []string{string(req.Currency)},
 			"productType":         []string{string(req.ProductType)},

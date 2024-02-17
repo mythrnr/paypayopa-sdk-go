@@ -61,7 +61,7 @@ func Test_refundPayment(t *testing.T) {
 		refund, info, err := refundPayment(ctx, client, &RefundPaymentPayload{})
 
 		t.Log(refund, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -105,7 +105,7 @@ func Test_refundPayment(t *testing.T) {
 		refund, info, err := refundPayment(ctx, client, &RefundPaymentPayload{})
 
 		t.Log(refund, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_PARAMS", info.Code)
@@ -139,7 +139,7 @@ func Test_refundPayment(t *testing.T) {
 		refund, info, err := refundPayment(ctx, client, &RefundPaymentPayload{})
 
 		t.Log(refund, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, refund)
 	})
@@ -192,7 +192,7 @@ func Test_getRefundDetails(t *testing.T) {
 		refund, info, err := getRefundDetails(ctx, client, "test-refund-id")
 
 		t.Log(refund, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -236,7 +236,7 @@ func Test_getRefundDetails(t *testing.T) {
 		refund, info, err := getRefundDetails(ctx, client, "test-refund-id")
 
 		t.Log(refund, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "TRANSACTION_FAILED", info.Code)
@@ -270,7 +270,7 @@ func Test_getRefundDetails(t *testing.T) {
 		refund, info, err := getRefundDetails(ctx, client, "test-refund-id")
 
 		t.Log(refund, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, refund)
 	})

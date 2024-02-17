@@ -75,7 +75,7 @@ func Test_createPendingPayment(t *testing.T) {
 		qrcode, info, err := createPendingPayment(ctx, client, &CreatePendingPaymentPayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -119,7 +119,7 @@ func Test_createPendingPayment(t *testing.T) {
 		qrcode, info, err := createPendingPayment(ctx, client, &CreatePendingPaymentPayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "DUPLICATE_REQUEST_ORDER", info.Code)
@@ -153,7 +153,7 @@ func Test_createPendingPayment(t *testing.T) {
 		qrcode, info, err := createPendingPayment(ctx, client, &CreatePendingPaymentPayload{})
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})
@@ -193,7 +193,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 		info, err := cancelPendingOrder(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -234,7 +234,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 		info, err := cancelPendingOrder(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "REQUEST_ORDER_NOT_FOUND", info.Code)
@@ -266,7 +266,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 		info, err := cancelPendingOrder(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 	})
 }
@@ -351,7 +351,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 		pay, info, err := getRequestedPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -395,7 +395,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 		pay, info, err := getRequestedPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_PARAMS", info.Code)
@@ -429,7 +429,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 		pay, info, err := getRequestedPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})

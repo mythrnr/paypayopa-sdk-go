@@ -51,7 +51,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -95,7 +95,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -129,7 +129,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})
@@ -179,7 +179,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 		status, info, err := getUserAuthorizationStatus(ctx, client, "test-user-authorization-id")
 
 		t.Log(status, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -223,7 +223,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 		qrcode, info, err := getUserAuthorizationStatus(ctx, client, "test-user-authorization-id")
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -257,7 +257,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 		qrcode, info, err := getUserAuthorizationStatus(ctx, client, "test-user-authorization-id")
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})
@@ -297,7 +297,7 @@ func Test_unlinkUser(t *testing.T) {
 		info, err := unlinkUser(ctx, client, "user-authorization-id")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -338,7 +338,7 @@ func Test_unlinkUser(t *testing.T) {
 		info, err := unlinkUser(ctx, client, "user-authorization-id")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -370,7 +370,7 @@ func Test_unlinkUser(t *testing.T) {
 		info, err := unlinkUser(ctx, client, "user-authorization-id")
 
 		t.Log(info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 	})
 }
@@ -412,7 +412,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 		profile, info, err := getMaskedUserProfile(ctx, client, "test-user-authorization-id")
 
 		t.Log(profile, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -456,7 +456,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 		profile, info, err := getMaskedUserProfile(ctx, client, "test-user-authorization-id")
 
 		t.Log(profile, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -490,7 +490,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 		qrcode, info, err := getMaskedUserProfile(ctx, client, "test-user-authorization-id")
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})

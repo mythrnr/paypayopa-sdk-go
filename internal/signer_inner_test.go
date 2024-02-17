@@ -23,14 +23,14 @@ func Test_Signer(t *testing.T) {
 			nil,
 		)
 
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		a, err := NewSigner("API_KEY", "API_KEY_SECRET", req)
 
-		require.Nil(t, err)
+		require.NoError(t, err)
 
-		assert.Equal(t, a.apiKey, "API_KEY")
-		assert.Equal(t, a.apiKeySecret, "API_KEY_SECRET")
+		assert.Equal(t, "API_KEY", a.apiKey)
+		assert.Equal(t, "API_KEY_SECRET", a.apiKeySecret)
 		assert.Empty(t, a.body)
 		assert.NotZero(t, a.epoch)
 		assert.Equal(t, http.MethodPost, a.method)
@@ -49,14 +49,14 @@ func Test_Signer(t *testing.T) {
 			bytes.NewBufferString(`{ "test": "value" }`),
 		)
 
-		require.Nil(t, err)
+		require.NoError(t, err)
 
 		a, err := NewSigner("API_KEY", "API_KEY_SECRET", req)
 
-		require.Nil(t, err)
+		require.NoError(t, err)
 
-		assert.Equal(t, a.apiKey, "API_KEY")
-		assert.Equal(t, a.apiKeySecret, "API_KEY_SECRET")
+		assert.Equal(t, "API_KEY", a.apiKey)
+		assert.Equal(t, "API_KEY_SECRET", a.apiKeySecret)
 		assert.Equal(t, []byte(`{ "test": "value" }`), a.body)
 		assert.NotZero(t, a.epoch)
 		assert.Equal(t, http.MethodPost, a.method)

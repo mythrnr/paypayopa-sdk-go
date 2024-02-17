@@ -32,6 +32,6 @@ func Test_ResultInfo_Success(t *testing.T) {
 	}}
 
 	for _, tt := range tests {
-		assert.Equal(t, tt.info.Success(), tt.want)
+		assert.Equal(t, tt.want, tt.info.Success())
 	}
 }

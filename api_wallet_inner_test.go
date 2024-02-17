@@ -51,7 +51,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 		wallet, info, err := checkUserWalletBalance(ctx, client, &CheckUserWalletBalancePayload{})
 
 		t.Log(wallet, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -95,7 +95,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 		wallet, info, err := checkUserWalletBalance(ctx, client, &CheckUserWalletBalancePayload{})
 
 		t.Log(wallet, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_REQUEST_PARAMS", info.Code)
@@ -129,7 +129,7 @@ func Test_checkUserWalletBalance(t *testing.T) {
 		wallet, info, err := checkUserWalletBalance(ctx, client, &CheckUserWalletBalancePayload{})
 
 		t.Log(wallet, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, wallet)
 	})
@@ -147,7 +147,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 				req, _ := args[0].(*http.Request)
 				assert.Equal(t,
 					string(EnvSandbox)+
-						"/v6/wallet/balance?"+
+						walletBalancePath+"?"+
 						"currency=JPY"+
 						"&productType=REAL_INVESTMENT"+
 						"&userAuthorizationId=user-authorization-id",
@@ -198,7 +198,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 			})
 
 		t.Log(wallet, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -220,7 +220,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 				req, _ := args[0].(*http.Request)
 				assert.Equal(t,
 					string(EnvSandbox)+
-						"/v6/wallet/balance?"+
+						walletBalancePath+"?"+
 						"currency="+
 						"&productType="+
 						"&userAuthorizationId=",
@@ -253,7 +253,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 		wallet, info, err := getUserWalletBalance(ctx, client, &GetUserWalletBalancePayload{})
 
 		t.Log(wallet, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -287,7 +287,7 @@ func Test_getUserWalletBalance(t *testing.T) {
 		wallet, info, err := getUserWalletBalance(ctx, client, &GetUserWalletBalancePayload{})
 
 		t.Log(wallet, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, wallet)
 	})
@@ -345,7 +345,7 @@ func Test_createTopupQRCode(t *testing.T) {
 		qrcode, info, err := createTopupQRCode(ctx, client, &CreateTopupQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -389,7 +389,7 @@ func Test_createTopupQRCode(t *testing.T) {
 		qrcode, info, err := createTopupQRCode(ctx, client, &CreateTopupQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_REQUEST_PARAMS", info.Code)
@@ -423,7 +423,7 @@ func Test_createTopupQRCode(t *testing.T) {
 		qrcode, info, err := createTopupQRCode(ctx, client, &CreateTopupQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})
@@ -463,7 +463,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 		info, err := deleteTopupQRCode(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -504,7 +504,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 		info, err := deleteTopupQRCode(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "UNAUTHORIZED", info.Code)
@@ -536,7 +536,7 @@ func Test_deleteTopupQRCode(t *testing.T) {
 		info, err := deleteTopupQRCode(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 	})
 }
@@ -585,7 +585,7 @@ func Test_getTopupDetails(t *testing.T) {
 		qrcode, info, err := getTopupDetails(ctx, client, "topup-id")
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -629,7 +629,7 @@ func Test_getTopupDetails(t *testing.T) {
 		qrcode, info, err := getTopupDetails(ctx, client, "topup-id")
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -663,7 +663,7 @@ func Test_getTopupDetails(t *testing.T) {
 		qrcode, info, err := getTopupDetails(ctx, client, "topup-id")
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})

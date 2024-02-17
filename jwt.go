@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type AuthorizationResponseToken struct {
@@ -27,7 +27,8 @@ type rawToken struct {
 	UserAuthorizationID string              `json:"userAuthorizationId"`
 	ReferenceID         string              `json:"referenceId"`
 
-	jwt.StandardClaims
+	Audience string `json:"aud"`
+	jwt.RegisteredClaims
 }
 
 func decodeAuthorizationResponseToken(
@@ -38,7 +39,7 @@ func decodeAuthorizationResponseToken(
 
 	if _, err := jwt.ParseWithClaims(
 		token, &claims,
-		func(token *jwt.Token) (interface{}, error) {
+		func(_ *jwt.Token) (interface{}, error) {
 			return []byte(creds.apiKeySecret), nil
 		},
 	); err != nil {
@@ -52,7 +53,7 @@ func decodeAuthorizationResponseToken(
 	return &AuthorizationResponseToken{
 		Audience:            claims.Audience,
 		Issuer:              claims.Issuer,
-		ExpiresAt:           claims.ExpiresAt,
+		ExpiresAt:           claims.ExpiresAt.Unix(),
 		Result:              claims.Result,
 		ProfileIdentifier:   claims.ProfileIdentifier,
 		Nonce:               claims.Nonce,

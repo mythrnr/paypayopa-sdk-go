@@ -93,7 +93,7 @@ func Test_createPayment(t *testing.T) {
 		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -137,7 +137,7 @@ func Test_createPayment(t *testing.T) {
 		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_REQUEST_PARAMS", info.Code)
@@ -171,7 +171,7 @@ func Test_createPayment(t *testing.T) {
 		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
@@ -211,7 +211,7 @@ func Test_cancelPayment(t *testing.T) {
 		info, err := cancelPayment(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "REQUEST_ACCEPTED", info.Code)
@@ -252,7 +252,7 @@ func Test_cancelPayment(t *testing.T) {
 		info, err := cancelPayment(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "ORDER_NOT_REVERSIBLE", info.Code)
@@ -284,7 +284,7 @@ func Test_cancelPayment(t *testing.T) {
 		info, err := cancelPayment(ctx, client, "1")
 
 		t.Log(info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 	})
 }
@@ -368,7 +368,7 @@ func Test_getPaymentDetails(t *testing.T) {
 		pay, info, err := getPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -412,7 +412,7 @@ func Test_getPaymentDetails(t *testing.T) {
 		pay, info, err := getPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "DYNAMIC_QR_PAYMENT_NOT_FOUND", info.Code)
@@ -446,7 +446,7 @@ func Test_getPaymentDetails(t *testing.T) {
 		pay, info, err := getPaymentDetails(ctx, client, "test-merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
@@ -533,7 +533,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			&CreateContinuousPaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -579,7 +579,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			&CreateContinuousPaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "REQUEST_ORDER_NOT_FOUND", info.Code)
@@ -615,7 +615,7 @@ func Test_createContinuousPayment(t *testing.T) {
 			&CreateContinuousPaymentPayload{})
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
@@ -660,7 +660,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			&ConsultExpectedCashbackInfoPayload{})
 
 		t.Log(cashback, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -713,7 +713,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			&ConsultExpectedCashbackInfoPayload{Lang: LangEN})
 
 		t.Log(cashback, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -759,7 +759,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			&ConsultExpectedCashbackInfoPayload{})
 
 		t.Log(cashback, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INTERNAL_SERVER_ERROR", info.Code)
@@ -795,7 +795,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			&ConsultExpectedCashbackInfoPayload{})
 
 		t.Log(cashback, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, cashback)
 	})

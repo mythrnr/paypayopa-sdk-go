@@ -82,7 +82,7 @@ func Test_createQRCode(t *testing.T) {
 		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -126,7 +126,7 @@ func Test_createQRCode(t *testing.T) {
 		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "DYNAMIC_QR_BAD_REQUEST", info.Code)
@@ -160,7 +160,7 @@ func Test_createQRCode(t *testing.T) {
 		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
 
 		t.Log(qrcode, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, qrcode)
 	})
@@ -200,7 +200,7 @@ func Test_deleteQRCode(t *testing.T) {
 		info, err := deleteQRCode(ctx, client, "test-code-id")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -241,7 +241,7 @@ func Test_deleteQRCode(t *testing.T) {
 		info, err := deleteQRCode(ctx, client, "test-code-id")
 
 		t.Log(info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "DYNAMIC_QR_NOT_FOUND", info.Code)
@@ -273,7 +273,7 @@ func Test_deleteQRCode(t *testing.T) {
 		info, err := deleteQRCode(ctx, client, "test-code-id")
 
 		t.Log(info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 	})
 }
@@ -380,7 +380,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 		pay, info, err := getCodePaymentDetails(ctx, client, "merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -424,7 +424,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 		pay, info, err := getCodePaymentDetails(ctx, client, "not-exist-id")
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "DYNAMIC_QR_PAYMENT_NOT_FOUND", info.Code)
@@ -458,7 +458,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 		pay, info, err := getCodePaymentDetails(ctx, client, "merchant-payment-id")
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})

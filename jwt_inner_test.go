@@ -24,7 +24,7 @@ func Test_decodeAuthorizationResponseToken(t *testing.T) {
 		token, err := decodeAuthorizationResponseToken(creds, testJWT)
 
 		assert.Nil(t, token)
-		assert.NotNil(t, err)
+		require.Error(t, err)
 		assert.Contains(t, err.Error(), "jwt: invalid")
 	})
 
@@ -44,8 +44,8 @@ func Test_decodeAuthorizationResponseToken(t *testing.T) {
 		token, err := decodeAuthorizationResponseToken(creds, testJWT)
 
 		assert.Nil(t, token)
-		assert.NotNil(t, err)
-		assert.Contains(t, err.Error(), "jwt: invalid: token is expired by")
+		require.Error(t, err)
+		assert.Contains(t, err.Error(), "token is expired")
 	})
 
 	t.Run("JWT has invalid aud", func(t *testing.T) {
@@ -82,7 +82,7 @@ func Test_decodeAuthorizationResponseToken(t *testing.T) {
 		testJWT := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJNRVJDSEFOVF9JRCIsImlzcyI6InBheXBheS5uZS5qcCIsImV4cCI6NDEwMjQxMjQwMCwicmVzdWx0Ijoic3VjY2VlZGVkIiwicHJvZmlsZUlkZW50aWZpZXIiOiIqKioqKioqNTY3OCIsIm5vbmNlIjoidGhlLXNhbWUtbm9uY2UtaW4tdGhlLXJlcXVlc3QiLCJ1c2VyQXV0aG9yaXphdGlvbklkIjoiUGF5UGF5IHVzZXIgcmVmZXJlbmNlIGlkIiwicmVmZXJlbmNlSWQiOiJtZXJjaGFudCB1c2VyIHJlZmVyZW5jZSBpZCJ9.GSyN-PxiVaq4PzXxXruz75IhnmM7q34JTsGeRrWVabw"
 		token, err := decodeAuthorizationResponseToken(creds, testJWT)
 
-		assert.Nil(t, err)
+		require.NoError(t, err)
 		require.NotNil(t, token)
 
 		assert.Equal(t, "MERCHANT_ID", token.Audience)

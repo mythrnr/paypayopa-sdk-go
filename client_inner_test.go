@@ -123,9 +123,10 @@ func Test_opaClient_Request(t *testing.T) {
 			map[string]interface{}{},
 		)
 
-		assert.Nil(t, req)
 		actual := &url.Error{}
-		assert.True(t, errors.As(err, &actual))
+
+		assert.Nil(t, req)
+		assert.ErrorAs(t, err, &actual)
 	})
 
 	t.Run("Success", func(t *testing.T) {
@@ -148,7 +149,7 @@ func Test_opaClient_Request(t *testing.T) {
 			map[string]interface{}{},
 		)
 
-		assert.Nil(t, err)
+		require.NoError(t, err)
 		assert.NotNil(t, req)
 	})
 }
@@ -292,10 +293,10 @@ func Test_opaClient_Do(t *testing.T) {
 
 		res := map[string]interface{}{}
 		info, err := client.Do(req, res)
+		actual := &json.SyntaxError{}
 
 		assert.Nil(t, info)
-		actual := &json.SyntaxError{}
-		assert.True(t, errors.As(err, &actual))
+		assert.ErrorAs(t, err, &actual)
 	})
 
 	t.Run("response.data is empty", func(t *testing.T) {
@@ -335,7 +336,7 @@ func Test_opaClient_Do(t *testing.T) {
 		res := map[string]interface{}{}
 		info, err := client.Do(req, res)
 
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -384,7 +385,7 @@ func Test_opaClient_Do(t *testing.T) {
 
 		info, err := client.Do(req, nil)
 
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -436,10 +437,10 @@ func Test_opaClient_Do(t *testing.T) {
 		}{}
 
 		info, err := client.Do(req, &res)
+		actual := &json.UnmarshalTypeError{}
 
 		assert.Nil(t, info)
-		actual := &json.UnmarshalTypeError{}
-		assert.True(t, errors.As(err, &actual))
+		assert.ErrorAs(t, err, &actual)
 	})
 
 	t.Run("Success", func(t *testing.T) {
@@ -485,7 +486,7 @@ func Test_opaClient_Do(t *testing.T) {
 
 		info, err := client.Do(req, &res)
 
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)

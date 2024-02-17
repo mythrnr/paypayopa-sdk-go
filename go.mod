@@ -1,9 +1,9 @@
 module github.com/mythrnr/paypayopa-sdk-go
 
-go 1.17
+go 1.20
 
 require (
-	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/golang-jwt/jwt/v5 v5.2.0
 	github.com/stretchr/testify v1.8.4
 )
 

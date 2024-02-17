@@ -27,9 +27,9 @@ const (
 //
 // # API Docs
 //
-// EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#tag/API
+// EN: https://www.paypay.ne.jp/opa/doc/v1.0/api_authorization.html
 //
-// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#tag/API
+// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/api_authorization.html
 type Signer struct {
 	apiKey       string
 	apiKeySecret string
@@ -84,12 +84,6 @@ func (a *Signer) ContentType() string {
 //
 // hash は認証ヘッダ作成の Step 1 の処理.
 // リクエストごとに使い捨てる為, hash はキャッシュする.
-//
-// # API Docs
-//
-// EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
-//
-// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
 func (a *Signer) hash() string {
 	if len(a.body) == 0 {
 		a.hashCache = contentTypeEmpty
@@ -111,12 +105,6 @@ func (a *Signer) hash() string {
 // macData is the process of Step 2 of the authentication header creation.
 //
 // macData は認証ヘッダ作成の Step 2 の処理.
-//
-// # API Docs
-//
-// EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
-//
-// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
 func (a *Signer) macData() []byte {
 	segments := []string{
 		a.uri,
@@ -133,12 +121,6 @@ func (a *Signer) macData() []byte {
 // base64hmacString is the process of Step 3 of the authentication header creation.
 //
 // base64hmacString は認証ヘッダ作成の Step 3 の処理.
-//
-// # API Docs
-//
-// EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
-//
-// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
 func (a *Signer) base64hmacString() string {
 	mac := hmac.New(sha256.New, []byte(a.apiKeySecret))
 	mac.Write(a.macData())
@@ -149,12 +131,6 @@ func (a *Signer) base64hmacString() string {
 // Sign is the process of Step 4 of the authentication header creation.
 //
 // Sign は認証ヘッダ作成の Step 4 の処理.
-//
-// # API Docs
-//
-// EN: https://www.paypay.ne.jp/opa/doc/v1.0/webcashier#section/HMAC-auth
-//
-// JP: https://www.paypay.ne.jp/opa/doc/jp/v1.0/webcashier#section/HMAC-auth
 func (a *Signer) Sign() string {
 	segments := []string{
 		"hmac OPA-Auth",

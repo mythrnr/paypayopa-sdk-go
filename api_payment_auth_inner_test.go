@@ -118,7 +118,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 			&CreatePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -164,7 +164,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 			&CreatePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_PARAMS", info.Code)
@@ -200,7 +200,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 			&CreatePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
@@ -304,7 +304,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			&CapturePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -351,7 +351,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			&CapturePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "USER_CONFIRMATION_REQUIRED", info.Code)
@@ -397,7 +397,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			&CapturePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "ALREADY_CAPTURED", info.Code)
@@ -433,7 +433,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 			&CapturePaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
@@ -482,7 +482,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 			&RevertPaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "SUCCESS", info.Code)
@@ -528,7 +528,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 			&RevertPaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.Nil(t, err)
+		require.NoError(t, err)
 
 		require.NotNil(t, info)
 		assert.Equal(t, "ORDER_NOT_CANCELABLE", info.Code)
@@ -564,7 +564,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 			&RevertPaymentAuthorizationPayload{})
 
 		t.Log(pay, info, err)
-		assert.ErrorIs(t, err, expected)
+		require.ErrorIs(t, err, expected)
 		assert.Nil(t, info)
 		assert.Nil(t, pay)
 	})
