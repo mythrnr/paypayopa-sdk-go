@@ -245,7 +245,7 @@ func (i *authInterceptor) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Set("Authorization", s.Sign())
 
 	if i.creds.merchantID != "" {
-		req.Header.Set("X-ASSUME-MERCHANT", i.creds.merchantID)
+		req.Header.Set("X-Assume-Merchant", i.creds.merchantID)
 	}
 
 	return i.next.RoundTrip(req)
