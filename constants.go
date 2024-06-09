@@ -81,7 +81,7 @@ const (
 	// to set to specify the language of the response.
 	//
 	// headerNameLang はレスポンスの言語を指定する為にセットする言語ヘッダの名前.
-	headerNameLang = "lang"
+	headerNameLang = "Lang"
 )
 
 // ProductType is the product type of the PayPay system.
