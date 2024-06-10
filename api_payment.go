@@ -146,7 +146,6 @@ func consultExpectedCashbackInfo(
 		"/v1/payments/cashback/expected",
 		req,
 	)
-
 	if err != nil {
 		return nil, nil, err
 	}
