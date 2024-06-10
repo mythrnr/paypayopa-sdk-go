@@ -1,4 +1,4 @@
-# see: https://github.com/golangci/golangci-lint/blob/master/.golangci.example.yml
+# see: https://golangci-lint.run/usage/configuration/
 run:
   go: "1.20"
 
@@ -47,19 +47,14 @@ linters-settings:
 
 linters:
   disable:
-    - "contextcheck"
     - "depguard"
     - "exhaustruct"
-    - "gofumpt"
     - "tagliatelle"
     - "varnamelen"
     - "wrapcheck"
     # ---- deprecated ---- #
     - "execinquery"
     - "gomnd"
-    - "rowserrcheck"
-    - "sqlclosecheck"
-    - "wastedassign"
     # -------------------- #
   enable-all: true
   fast: false
@@ -74,10 +69,5 @@ issues:
       linters:
         - "dupl"
         - "err113"
-        - "errcheck"
         - "funlen"
-        - "goerr113"
         - "maintidx"
-    - path: "example"
-      linters:
-        - "mnd"
