@@ -14,7 +14,7 @@
 
 ## Requirements
 
-- Go 1.20 or above.
+- Go 1.21 or above.
 - Docker (for Development)
 
 ### For development
