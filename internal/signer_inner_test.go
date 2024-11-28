@@ -57,7 +57,7 @@ func Test_Signer(t *testing.T) {
 
 		assert.Equal(t, "API_KEY", a.apiKey)
 		assert.Equal(t, "API_KEY_SECRET", a.apiKeySecret)
-		assert.Equal(t, []byte(`{ "test": "value" }`), a.body)
+		assert.JSONEq(t, `{ "test": "value" }`, string(a.body))
 		assert.NotZero(t, a.epoch)
 		assert.Equal(t, http.MethodPost, a.method)
 		assert.Equal(t, "/test", a.uri)

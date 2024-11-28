@@ -20,7 +20,7 @@ func nonce(n uint) string {
 	seed := rand.New(rand.NewSource(time.Now().UnixNano()))
 	b := make([]byte, 0, n)
 
-	for i := uint(0); i < n; i++ {
+	for range n {
 		b = append(b, charset[seed.Intn(len(charset))])
 	}
 

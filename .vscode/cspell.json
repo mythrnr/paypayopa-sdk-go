@@ -26,6 +26,7 @@
     "dupl",
     "execinquery",
     "exhaustruct",
+    "exportloopref",
     "funlen",
     "gocognit",
     "gocyclo",
