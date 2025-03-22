@@ -55,6 +55,7 @@
     "sonatypecommunity",
     "sqlclosecheck",
     "stretchr",
+    "tenv",
     "testpackage",
     "topup",
     "varnamelen",

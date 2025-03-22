@@ -53,7 +53,7 @@ linters:
     - "varnamelen"
     - "wrapcheck"
     # ---- deprecated ---- #
-    - "exportloopref"
+    - "tenv"
     # -------------------- #
   enable-all: true
   fast: false
