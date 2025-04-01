@@ -632,6 +632,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 			Return(&http.Response{
 				Status:     http.StatusText(http.StatusOK),
 				StatusCode: http.StatusOK,
+				//nolint:gosmopolitan
 				Body: io.NopCloser(bytes.NewBufferString(`{
 					"resultInfo": {
 						"code": "SUCCESS",
@@ -670,6 +671,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 		assert.True(t, info.Success())
 
 		require.NotNil(t, cashback)
+		//nolint:gosmopolitan
 		assert.Equal(t, "100円相当戻ってくる！", cashback.Campaignmessage)
 	})
 

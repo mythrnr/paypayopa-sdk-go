@@ -124,7 +124,7 @@ func Test_createPendingPayment(t *testing.T) {
 		require.NotNil(t, info)
 		assert.Equal(t, "DUPLICATE_REQUEST_ORDER", info.Code)
 		assert.Equal(t, "Request order with same payment ID exists", info.Message)
-		assert.Equal(t, "", info.CodeID)
+		assert.Empty(t, info.CodeID)
 		assert.Equal(t, http.StatusBadRequest, info.StatusCode)
 		assert.False(t, info.Success())
 
@@ -239,7 +239,7 @@ func Test_cancelPendingOrder(t *testing.T) {
 		require.NotNil(t, info)
 		assert.Equal(t, "REQUEST_ORDER_NOT_FOUND", info.Code)
 		assert.Equal(t, "Request order not in valid state", info.Message)
-		assert.Equal(t, "", info.CodeID)
+		assert.Empty(t, info.CodeID)
 		assert.Equal(t, http.StatusNotFound, info.StatusCode)
 		assert.False(t, info.Success())
 	})
@@ -400,7 +400,7 @@ func Test_getRequestedPaymentDetails(t *testing.T) {
 		require.NotNil(t, info)
 		assert.Equal(t, "INVALID_PARAMS", info.Code)
 		assert.Equal(t, "The set parameter is invalid", info.Message)
-		assert.Equal(t, "", info.CodeID)
+		assert.Empty(t, info.CodeID)
 		assert.Equal(t, http.StatusBadRequest, info.StatusCode)
 		assert.False(t, info.Success())
 
