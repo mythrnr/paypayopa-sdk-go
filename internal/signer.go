@@ -79,6 +79,22 @@ func (a *Signer) ContentType() string {
 	return contentType
 }
 
+// Sign is the process of Step 4 of the authentication header creation.
+//
+// Sign は認証ヘッダ作成の Step 4 の処理.
+func (a *Signer) Sign() string {
+	segments := []string{
+		"hmac OPA-Auth",
+		a.apiKey,
+		a.base64hmacString(),
+		a.nonce,
+		strconv.FormatInt(a.epoch, 10),
+		a.hash(),
+	}
+
+	return strings.Join(segments, ":")
+}
+
 // hash is the process of Step 1 of the authentication header creation.
 // The hash is cached to be used for each request.
 //
@@ -126,20 +142,4 @@ func (a *Signer) base64hmacString() string {
 	mac.Write(a.macData())
 
 	return base64.StdEncoding.EncodeToString(mac.Sum(nil))
-}
-
-// Sign is the process of Step 4 of the authentication header creation.
-//
-// Sign は認証ヘッダ作成の Step 4 の処理.
-func (a *Signer) Sign() string {
-	segments := []string{
-		"hmac OPA-Auth",
-		a.apiKey,
-		a.base64hmacString(),
-		a.nonce,
-		strconv.FormatInt(a.epoch, 10),
-		a.hash(),
-	}
-
-	return strings.Join(segments, ":")
 }

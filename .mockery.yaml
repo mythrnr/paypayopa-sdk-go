@@ -1,0 +1,27 @@
+template: "testify"
+
+packages:
+  encoding/json:
+    config:
+      dir: "internal/mocks"
+      filename: "encoding_json_mock.go"
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      Marshaler:
+  io:
+    config:
+      dir: "internal/mocks"
+      filename: "io_mock.go"
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      ReadCloser:
+  net/http:
+    config:
+      dir: "internal/mocks"
+      filename: "net_http_mock.go"
+      pkgname: "mocks"
+      structname: "{{.InterfaceName}}"
+    interfaces:
+      RoundTripper:

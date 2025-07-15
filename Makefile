@@ -26,30 +26,7 @@ lint:
 .PHONY: mock
 mock:
 	docker pull vektra/mockery:latest > /dev/null
-
-	docker run --rm \
-		-v $(pwd):/src \
-		-w /src vektra/mockery \
-		--case=underscore \
-		--dir=/usr/local/go/src/net/http \
-		--name=RoundTripper \
-		--output=internal/mocks
-
-	docker run --rm \
-		-v $(pwd):/src \
-		-w /src vektra/mockery \
-		--case=underscore \
-		--dir=/usr/local/go/src/io \
-		--name=ReadCloser \
-		--output=internal/mocks
-
-	docker run --rm \
-		-v $(pwd):/src \
-		-w /src vektra/mockery \
-		--case=underscore \
-		--dir=/usr/local/go/src/encoding/json \
-		--name=Marshaler \
-		--output=internal/mocks
+	docker run --rm -v $(pwd):/src -w /src vektra/mockery
 
 .PHONY: nancy
 nancy:

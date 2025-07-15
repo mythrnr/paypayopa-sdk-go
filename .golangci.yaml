@@ -8,10 +8,15 @@ linters:
   default: "all"
   disable:
     - "depguard"
+    - "embeddedstructfieldcheck"
     - "exhaustruct"
+    - "noinlineerr"
     - "tagliatelle"
     - "varnamelen"
     - "wrapcheck"
+    - "wsl_v5"
+    # deprecated linters
+    - "wsl"
   settings:
     cyclop:
       max-complexity: 20
