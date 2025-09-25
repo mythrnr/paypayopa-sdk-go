@@ -5,6 +5,9 @@ endif
 pkg ?= ./...
 pwd = $(shell pwd)
 
+.PHONY: ci-suite
+ci-suite: spell-check fmt lint mock vulnerability-check test
+
 .PHONY: clean
 clean:
 	rm -rf .cache/*
@@ -27,12 +30,6 @@ lint:
 mock:
 	docker pull vektra/mockery:latest > /dev/null
 	docker run --rm -v $(pwd):/src -w /src vektra/mockery
-
-.PHONY: nancy
-nancy:
-	docker pull sonatypecommunity/nancy:latest > /dev/null \
-	&& go list -buildvcs=false -deps -json $(pkg) \
-	| docker run --rm -i sonatypecommunity/nancy:latest sleuth
 
 .PHONY: spell-check
 spell-check:
@@ -61,3 +58,8 @@ test-json:
 .PHONY: tidy
 tidy:
 	go mod tidy
+
+.PHONY: vulnerability-check
+vulnerability-check:
+	go install golang.org/x/vuln/cmd/govulncheck@latest
+	govulncheck -show=version ./...
