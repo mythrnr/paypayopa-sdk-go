@@ -11,7 +11,7 @@ type CreateQRCodePayload struct {
 	Amount              *MoneyAmount         `json:"amount"`
 	OrderDescription    string               `json:"orderDescription"`
 	OrderItems          []*MerchantOrderItem `json:"orderItems"`
-	Metadata            interface{}          `json:"metadata"`
+	Metadata            any                  `json:"metadata"`
 	CodeType            CodeType             `json:"codeType"`
 	StoreInfo           string               `json:"storeInfo"`
 	StoreID             string               `json:"storeId"`

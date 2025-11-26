@@ -51,7 +51,7 @@ func newClientWithHTTPClient(creds *Credentials, hc *http.Client) *opaClient {
 func (c *opaClient) GET(
 	ctx context.Context,
 	path string,
-	res interface{},
+	res any,
 ) (*ResultInfo, error) {
 	req, err := c.Request(ctx, http.MethodGet, path, nil)
 	if err != nil {
@@ -86,8 +86,8 @@ func (c *opaClient) DELETE(
 func (c *opaClient) POST(
 	ctx context.Context,
 	path string,
-	res interface{},
-	req interface{},
+	res any,
+	req any,
 ) (*ResultInfo, error) {
 	rq, err := c.Request(ctx, http.MethodPost, path, req)
 	if err != nil {
@@ -109,7 +109,7 @@ func (c *opaClient) POST(
 func (c *opaClient) Request(
 	ctx context.Context,
 	method, path string,
-	req interface{},
+	req any,
 ) (*http.Request, error) {
 	var reader io.Reader
 
@@ -136,7 +136,7 @@ func (c *opaClient) Request(
 //
 // Do はリクエストを送信する.
 // res にレスポンスを格納し, 処理結果とエラーオブジェクトを返す.
-func (c *opaClient) Do(req *http.Request, res interface{}) (*ResultInfo, error) {
+func (c *opaClient) Do(req *http.Request, res any) (*ResultInfo, error) {
 	ctx, cancel := context.WithTimeout(
 		req.Context(),
 		getTimeout(req.Context()),
