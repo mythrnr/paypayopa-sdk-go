@@ -39,7 +39,7 @@ func decodeAuthorizationResponseToken(
 
 	if _, err := jwt.ParseWithClaims(
 		token, &claims,
-		func(_ *jwt.Token) (interface{}, error) {
+		func(_ *jwt.Token) (any, error) {
 			return []byte(creds.apiKeySecret), nil
 		},
 	); err != nil {

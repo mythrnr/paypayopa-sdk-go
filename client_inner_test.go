@@ -120,7 +120,7 @@ func Test_opaClient_Request(t *testing.T) {
 			context.Background(),
 			http.MethodPost,
 			"%%%%-invalid-url-%%%%",
-			map[string]interface{}{},
+			map[string]any{},
 		)
 
 		actual := &url.Error{}
@@ -146,7 +146,7 @@ func Test_opaClient_Request(t *testing.T) {
 			context.Background(),
 			http.MethodPost,
 			"/test",
-			map[string]interface{}{},
+			map[string]any{},
 		)
 
 		require.NoError(t, err)
@@ -181,7 +181,7 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := map[string]interface{}{}
+		res := map[string]any{}
 		info, err := client.Do(req, res)
 
 		assert.Nil(t, info)
@@ -213,7 +213,7 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := map[string]interface{}{}
+		res := map[string]any{}
 		info, err := client.Do(req, res)
 
 		assert.Nil(t, info)
@@ -256,7 +256,7 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := map[string]interface{}{}
+		res := map[string]any{}
 		info, err := client.Do(req, res)
 
 		assert.Nil(t, info)
@@ -291,7 +291,7 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := map[string]interface{}{}
+		res := map[string]any{}
 		info, err := client.Do(req, res)
 		actual := &json.SyntaxError{}
 
@@ -333,7 +333,7 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := map[string]interface{}{}
+		res := map[string]any{}
 		info, err := client.Do(req, res)
 
 		require.NoError(t, err)
