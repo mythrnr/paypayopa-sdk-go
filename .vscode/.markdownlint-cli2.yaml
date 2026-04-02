@@ -1,0 +1,19 @@
+config:
+  default: true
+  # Disable some built-in rules
+  # https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+  MD004:
+    style: "dash"
+  MD009: false
+  MD013:
+    code_blocks: false
+    tables: false
+  MD048:
+    style: "backtick"
+  MD060:
+    style: "compact"
+
+fix: false
+
+ignores:
+  - ".cache/**"

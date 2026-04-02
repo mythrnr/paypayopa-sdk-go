@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make clean)",
+      "Bash(make fmt)",
+      "Bash(make lint)",
+      "Bash(make lint-markdown)",
+      "Bash(make mock)",
+      "Bash(make spell-check)",
+      "Bash(make test)",
+      "Bash(make test-json)",
+      "Bash(make tidy)",
+      "Bash(make vulnerability-check)"
+    ],
+    "deny": [
+      "Bash(make release *)"
+    ]
+  }
+}

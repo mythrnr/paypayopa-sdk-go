@@ -2,62 +2,40 @@
 
 [English](./README.md)
 
-- ⚠️ この SDK は **非公式** . ⚠️
-- `paypayopa` は PayPay API を Go で使うための SDK を提供する.
-- 公式サイト: https://developer.paypay.ne.jp
+> **注意**: この SDK は **非公式** である.
+> 公式ドキュメントは <https://developer.paypay.ne.jp> を参照すること.
 
-## Status
+パッケージ `paypayopa` は
+[PayPay Open Payment API](https://developer.paypay.ne.jp)
+の Go SDK を提供する.
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/mythrnr/paypayopa-sdk-go.svg)](https://pkg.go.dev/github.com/mythrnr/paypayopa-sdk-go)
 [![Check codes](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check-code.yaml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/check-code.yaml)
-
 [![Scan Vulnerabilities](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/scan-vulnerabilities.yaml/badge.svg)](https://github.com/mythrnr/paypayopa-sdk-go/actions/workflows/scan-vulnerabilities.yaml)
 
-## Requirements
+## 要件
 
-- Go 1.24 以上.
-- Docker (開発時)
+- Go 1.24 以上
 
-### 開発に必要
-
-- [golangci-lint](https://golangci-lint.run)
-
-- [mockery](https://github.com/vektra/mockery)
-
-## Install
-
-`go get` で取得する.
+## インストール
 
 ```bash
 go get github.com/mythrnr/paypayopa-sdk-go
 ```
 
-## Feature
+## 設計
 
-### インテグレーションベースの SDK
+REST API ベースの SDK と異なり、この SDK は
+[インテグレーションシナリオ](https://developer.paypay.ne.jp/products)
+ごとにクライアントを提供する.
+各クライアントは該当する決済フローに関連するメソッドのみを公開する.
 
-公式の `paypay/paypayopa-sdk-*` も当然ながら十分に役割を果たすが, 
-`mythrnr/paypayopa-sdk-go` は SDK の統合に更に集中するために
-Web Payment や Native Payment などのインテグレーションごとに
-クライアントを生成して利用する.
+## クイックスタート
 
-## Usage
+### 1. 資格情報の生成
 
-使用可能なインテグレーションは下記の通り.
-
-|インテグレーション|ドキュメント|
-|-|-|
-|Web Payment|https://developer.paypay.ne.jp/products/docs/webpayment|
-|Native Payment|https://developer.paypay.ne.jp/products/docs/nativepayment|
-|Dynamic QR|https://developer.paypay.ne.jp/products/docs/qrcode|
-|App Invoke|https://developer.paypay.ne.jp/products/docs/appinvoke|
-|Continuous Payment|https://developer.paypay.ne.jp/products/docs/continuouspayment|
-|PreAuth & Capture|https://developer.paypay.ne.jp/products/docs/preauthcapture|
-|Request Money|https://developer.paypay.ne.jp/products/docs/pendingpayment|
-
-### 資格情報の生成
-
-- `paypayopa.NewCredentials` を使い, 開発者ページで生成した API キーなどを設定する.
-- `paypayopa.Env***` を指定し, 接続先を切り替える.
+[PayPay 開発者ページ](https://developer.paypay.ne.jp)
+で生成した API キーを使い `paypayopa.NewCredentials` を呼び出す.
 
 ```go
 creds := paypayopa.NewCredentials(
@@ -68,14 +46,15 @@ creds := paypayopa.NewCredentials(
 )
 ```
 
-### Web Payment を用いた QR コードの作成と削除の例
+### 2. クライアントの生成と API 呼び出し
+
+以下の例では Web Payment の QR コードを作成し、削除する.
 
 ```go
 package main
 
 import (
     "context"
-    "encoding/json"
     "log"
 
     "github.com/google/uuid"
@@ -93,28 +72,102 @@ func main() {
     wp := paypayopa.NewWebPayment(creds)
     ctx := context.Background()
 
-    res, info, err := wp.CreateCode(ctx, &paypayopa.CreateQrCodePayload{
+    res, info, err := wp.CreateQRCode(ctx, &paypayopa.CreateQRCodePayload{
         MerchantPaymentID: uuid.NewString(),
         Amount: &paypayopa.MoneyAmount{
             Amount:   1000,
             Currency: paypayopa.CurrencyJPY,
         },
         CodeType:     paypayopa.CodeTypeOrderQR,
-        RedirectURL:  "https://localhost",
+        RedirectURL:  "https://example.com/callback",
         RedirectType: paypayopa.RedirectTypeWebLink,
     })
 
     if err != nil {
-        log.Fatalf("%+v", err)
+        log.Fatalf("request failed: %+v", err)
     }
 
     if !info.Success() {
-        log.Fatalf("%+v", info)
+        log.Fatalf("API error: %s (code: %s)", info.Message, info.Code)
     }
 
-    info, err = wp.DeleteCode(ctx, res.CodeID)
-    if err != nil {
-        log.Fatalf("%+v", err)
+    log.Printf("QR Code URL: %s", res.URL)
+
+    if _, err = wp.DeleteQRCode(ctx, res.CodeID); err != nil {
+        log.Fatalf("delete failed: %+v", err)
     }
 }
 ```
+
+より完全なサンプルアプリケーションは
+[paypay-sample-ecommerce-backend-go](https://github.com/mythrnr/paypay-sample-ecommerce-backend-go)
+を参照すること.
+
+## 対応インテグレーション
+
+| インテグレーション | ドキュメント | クライアント |
+| ------------------ | ------------ | ------------ |
+| Web Payment | [Doc](https://developer.paypay.ne.jp/products/docs/webpayment) | `NewWebPayment` |
+| Native Payment | [Doc](https://developer.paypay.ne.jp/products/docs/nativepayment) | `NewNativePayment` |
+| Dynamic QR | [Doc](https://developer.paypay.ne.jp/products/docs/qrcode) | `NewDynamicQR` |
+| App Invoke | [Doc](https://developer.paypay.ne.jp/products/docs/appinvoke) | `NewAppInvoke` |
+| Continuous Payment | [Doc](https://developer.paypay.ne.jp/products/docs/continuouspayment) | `NewContinuousPayment` |
+| PreAuth & Capture | [Doc](https://developer.paypay.ne.jp/products/docs/preauthcapture) | `NewPreAuthCapture` |
+| Request Money | [Doc](https://developer.paypay.ne.jp/products/docs/pendingpayment) | `NewRequestMoney` |
+
+## 環境
+
+以下の定数で接続先環境を指定する.
+
+| 定数 | 環境 |
+| ---- | ---- |
+| `paypayopa.EnvProduction` | 本番 |
+| `paypayopa.EnvStaging` | ステージング |
+| `paypayopa.EnvSandbox` | サンドボックス (開発用) |
+
+## エラーハンドリング
+
+全ての API メソッドは `(response, *ResultInfo, error)` を返す.
+
+- `error` はリクエスト自体が失敗した場合 (ネットワークエラー、マーシャリング失敗など)
+  に非 nil となる.
+- `ResultInfo.Success()` は HTTP ステータスコードが 400 未満の場合に `true` を返す.
+- `ResultInfo.Code` と `ResultInfo.Message` に API レベルのエラー詳細が含まれる.
+
+```go
+res, info, err := client.CreateQRCode(ctx, payload)
+if err != nil {
+    // トランスポートまたはマーシャリングのエラー
+    log.Fatal(err)
+}
+
+if !info.Success() {
+    // API がエラーレスポンスを返した場合
+    log.Printf("code=%s message=%s", info.Code, info.Message)
+}
+```
+
+## カスタム HTTP クライアント
+
+各クライアントのコンストラクタには、設定済みの `*http.Client` を受け取る
+`WithHTTPClient` バリアントがある.
+タイムアウト、プロキシ、トランスポートレベルの設定をカスタマイズする場合に使用する.
+
+```go
+httpClient := &http.Client{
+    Timeout: 30 * time.Second,
+}
+
+wp := paypayopa.NewWebPaymentWithHTTPClient(creds, httpClient)
+```
+
+## Webhook
+
+SDK は Webhook ペイロード用の型付き構造体を提供する.
+`Webhook*` 型については
+[パッケージドキュメント](https://pkg.go.dev/github.com/mythrnr/paypayopa-sdk-go)
+を参照すること.
+
+## ライセンス
+
+[MIT](./LICENSE)

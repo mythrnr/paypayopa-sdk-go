@@ -2,7 +2,7 @@
 version: "2"
 
 run:
-  go: "1.25"
+  go: "1.26"
 
 linters:
   default: "all"
@@ -37,6 +37,7 @@ linters:
         - "G401"
         - "G404"
         - "G501"
+        - "G704"
     lll:
       line-length: 100
       tab-width: 4
