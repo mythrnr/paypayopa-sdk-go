@@ -143,7 +143,7 @@ make test-json         # Run tests with JSON output (used in CI)
 
 - **golangci-lint**: Code style and static analysis.
 - **spell-check**: Spelling validation with cspell.
-- **testing**: Runs on Go 1.24 and 1.25.
+- **testing**: Runs on Go 1.24, 1.25, and 1.26.
 - **vulnerability scanning**: `govulncheck`, runs daily and on every push.
 
 ## Dependencies
