@@ -6,7 +6,7 @@ pkg ?= ./...
 pwd = $(shell pwd)
 
 .PHONY: ci-suite
-ci-suite: spell-check fmt lint mock vulnerability-check test
+ci-suite: spell-check fmt lint lint-markdown mock vulnerability-check test
 
 .PHONY: clean
 clean:
@@ -18,24 +18,26 @@ fmt:
 
 .PHONY: lint
 lint:
-	docker pull golangci/golangci-lint:latest > /dev/null \
-	&& mkdir -p .cache/golangci-lint .cache/go-build \
-	&& docker run --rm \
-		-v $(pwd):/app \
-		-v $(pwd)/.cache:/root/.cache \
+	mkdir -p .cache/golangci-lint .cache/go-build \
+	&& docker run --pull always --rm \
+		-v "$(pwd):/app" \
+		-v "$(pwd)/.cache:/root/.cache" \
 		-w /app \
 		golangci/golangci-lint:latest golangci-lint run $(pkg)
 
+.PHONY: lint-markdown
+lint-markdown:
+	docker run --pull always --rm -v "$(pwd):$(pwd)" -w "$(pwd)" \
+		davidanson/markdownlint-cli2:latest "**/*.md" \
+		--config .vscode/.markdownlint-cli2.yaml
+
 .PHONY: mock
 mock:
-	docker pull vektra/mockery:latest > /dev/null
-	docker run --rm -v $(pwd):/src -w /src vektra/mockery
+	docker run --pull always --rm -v "$(pwd):/src" -w /src vektra/mockery
 
 .PHONY: spell-check
 spell-check:
-	docker pull ghcr.io/streetsidesoftware/cspell:latest > /dev/null \
-	&& docker run --rm \
-		-v $(pwd):/workdir \
+	docker run --pull always --rm -v "$(pwd):/workdir" \
 		ghcr.io/streetsidesoftware/cspell:latest \
 			--config /workdir/.vscode/cspell.json "**"
 

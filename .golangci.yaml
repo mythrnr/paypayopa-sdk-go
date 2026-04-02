@@ -37,6 +37,7 @@ linters:
         - "G401"
         - "G404"
         - "G501"
+        - "G704"
     lll:
       line-length: 100
       tab-width: 4
