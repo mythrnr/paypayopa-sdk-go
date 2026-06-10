@@ -10,12 +10,14 @@ linters:
     - "depguard"
     - "embeddedstructfieldcheck"
     - "exhaustruct"
+    - "goconst"
     - "noinlineerr"
     - "tagliatelle"
     - "varnamelen"
     - "wrapcheck"
     - "wsl_v5"
     # deprecated linters
+    - "gomodguard"
     - "wsl"
   settings:
     cyclop:
