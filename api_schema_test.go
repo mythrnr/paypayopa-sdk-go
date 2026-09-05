@@ -12,26 +12,18 @@ func Test_ResultInfo_Success(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
-		info *paypayopa.ResultInfo
-		want bool
-	}{{
-		info: &paypayopa.ResultInfo{
-			StatusCode: http.StatusOK,
-		},
-		want: true,
-	}, {
-		info: &paypayopa.ResultInfo{
-			StatusCode: http.StatusBadRequest,
-		},
-		want: false,
-	}, {
-		info: &paypayopa.ResultInfo{
-			StatusCode: http.StatusInternalServerError,
-		},
-		want: false,
-	}}
+		statusCode int
+		want       bool
+	}{
+		{statusCode: http.StatusOK, want: true},
+		{statusCode: http.StatusBadRequest, want: false},
+		{statusCode: http.StatusInternalServerError, want: false},
+	}
 
 	for _, tt := range tests {
-		assert.Equal(t, tt.want, tt.info.Success())
+		info := new(paypayopa.ResultInfo)
+		info.StatusCode = tt.statusCode
+
+		assert.Equal(t, tt.want, info.Success())
 	}
 }

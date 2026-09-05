@@ -1,10 +1,8 @@
 package paypayopa
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"testing"
 
@@ -20,12 +18,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 	t.Run("Created", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusCreated),
-				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusCreated, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -34,8 +27,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 					"data": {
 						"linkQRCodeURL": "https://localhost/linkqr"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -44,11 +36,12 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
+		qrcode, info, err := createAccountLinkQRCode(
+			ctx, client, new(CreateAccountLinkQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.NoError(t, err)
@@ -67,19 +60,13 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 	t.Run("Something went wrong on PayPay service side", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusInternalServerError),
-				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusInternalServerError, `{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
 						"codeId": "08101000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -88,11 +75,12 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
+		qrcode, info, err := createAccountLinkQRCode(
+			ctx, client, new(CreateAccountLinkQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.NoError(t, err)
@@ -111,7 +99,7 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -122,11 +110,12 @@ func Test_createAccountLinkQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createAccountLinkQRCode(ctx, client, &CreateAccountLinkQRCodePayload{})
+		qrcode, info, err := createAccountLinkQRCode(
+			ctx, client, new(CreateAccountLinkQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.ErrorIs(t, err, expected)
@@ -141,12 +130,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -162,8 +146,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 						"expireAt": 0,
 						"issuedAt": 0
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -172,7 +155,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -195,19 +178,13 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 	t.Run("Something went wrong on PayPay service side", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusInternalServerError),
-				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusInternalServerError, `{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
 						"codeId": "08101000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -216,7 +193,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -239,7 +216,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -250,7 +227,7 @@ func Test_getUserAuthorizationStatus(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -269,19 +246,13 @@ func Test_unlinkUser(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
 						"codeId": "08100001"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -290,7 +261,7 @@ func Test_unlinkUser(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -310,19 +281,13 @@ func Test_unlinkUser(t *testing.T) {
 	t.Run("Something went wrong on PayPay service side", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusInternalServerError),
-				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusInternalServerError, `{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
 						"codeId": "08101000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -331,7 +296,7 @@ func Test_unlinkUser(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -352,7 +317,7 @@ func Test_unlinkUser(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -363,7 +328,7 @@ func Test_unlinkUser(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -381,12 +346,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -395,8 +355,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 					"data": {
 						"phoneNumber": "*******1234"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -405,7 +364,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -428,19 +387,13 @@ func Test_getMaskedUserProfile(t *testing.T) {
 	t.Run("Something went wrong on PayPay service side", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusInternalServerError),
-				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusInternalServerError, `{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
 						"codeId": "08101000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -449,7 +402,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -472,7 +425,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -483,7 +436,7 @@ func Test_getMaskedUserProfile(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()

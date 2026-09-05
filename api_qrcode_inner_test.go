@@ -1,10 +1,8 @@
 package paypayopa
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"testing"
 
@@ -20,12 +18,7 @@ func Test_createQRCode(t *testing.T) {
 	t.Run("Created", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusCreated),
-				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusCreated, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -65,8 +58,7 @@ func Test_createQRCode(t *testing.T) {
 						"isAuthorization": true,
 						"authorizationExpiry": null
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -75,11 +67,11 @@ func Test_createQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
+		qrcode, info, err := createQRCode(ctx, client, new(CreateQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.NoError(t, err)
@@ -98,19 +90,13 @@ func Test_createQRCode(t *testing.T) {
 	t.Run("Dynamic QR bad request error", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_BAD_REQUEST",
 						"message": "Dynamic QR bad request error",
 						"codeId": "01650000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -119,11 +105,11 @@ func Test_createQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
+		qrcode, info, err := createQRCode(ctx, client, new(CreateQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.NoError(t, err)
@@ -142,7 +128,7 @@ func Test_createQRCode(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -153,11 +139,11 @@ func Test_createQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		qrcode, info, err := createQRCode(ctx, client, &CreateQRCodePayload{})
+		qrcode, info, err := createQRCode(ctx, client, new(CreateQRCodePayload))
 
 		t.Log(qrcode, info, err)
 		require.ErrorIs(t, err, expected)
@@ -172,19 +158,13 @@ func Test_deleteQRCode(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
 						"codeId": "08100001"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -193,7 +173,7 @@ func Test_deleteQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -213,19 +193,13 @@ func Test_deleteQRCode(t *testing.T) {
 	t.Run("Dynamic qr code not found", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusNotFound),
-				StatusCode: http.StatusNotFound,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusNotFound, `{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_NOT_FOUND",
 						"message": "Dynamic qr code not found",
 						"codeId": "01652072"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -234,7 +208,7 @@ func Test_deleteQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -255,7 +229,7 @@ func Test_deleteQRCode(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -266,7 +240,7 @@ func Test_deleteQRCode(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -284,12 +258,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 	t.Run("Created", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusCreated),
-				StatusCode: http.StatusCreated,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusCreated, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -363,8 +332,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 						],
 						"metadata": {}
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -373,7 +341,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -396,19 +364,13 @@ func Test_getCodePaymentDetails(t *testing.T) {
 	t.Run("Dynamic QR payment not found", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusNotFound),
-				StatusCode: http.StatusNotFound,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusNotFound, `{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_PAYMENT_NOT_FOUND",
 						"message": "Dynamic QR payment not found",
 						"codeId": "01652075"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -417,7 +379,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -440,7 +402,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -451,7 +413,7 @@ func Test_getCodePaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()

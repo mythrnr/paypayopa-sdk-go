@@ -20,7 +20,7 @@ import (
 type opaClient struct{ http *http.Client }
 
 func newClient(creds *Credentials) *opaClient {
-	return newClientWithHTTPClient(creds, &http.Client{})
+	return newClientWithHTTPClient(creds, new(http.Client))
 }
 
 func newClientWithHTTPClient(creds *Credentials, hc *http.Client) *opaClient {
@@ -168,7 +168,7 @@ func (c *opaClient) Do(req *http.Request, res any) (*ResultInfo, error) {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	body := &response{}
+	body := new(response)
 
 	if err := json.Unmarshal(b, body); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response body: %w", err)

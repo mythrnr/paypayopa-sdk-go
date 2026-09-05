@@ -41,7 +41,7 @@ func checkUserWalletBalance(
 ) (*CheckUserWalletBalance, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &CheckUserWalletBalance{}
+	res := new(CheckUserWalletBalance)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/wallet/check_balance?"+url.Values{
@@ -69,7 +69,7 @@ func getUserWalletBalance(
 ) (*UserWalletBalanceResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &UserWalletBalanceResponse{}
+	res := new(UserWalletBalanceResponse)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		walletBalancePath+"?"+url.Values{
@@ -133,7 +133,7 @@ func createTopupQRCode(
 ) (*TopupQRCodeResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &TopupQRCodeResponse{}
+	res := new(TopupQRCodeResponse)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/code/topup",
@@ -168,7 +168,7 @@ func getTopupDetails(
 ) (*TopupQRCodeDetailsResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &TopupQRCodeDetailsResponse{}
+	res := new(TopupQRCodeDetailsResponse)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/code/topup/"+merchantTopUpID,

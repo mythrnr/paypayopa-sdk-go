@@ -49,10 +49,12 @@ func NewSigner(
 	a := &Signer{
 		apiKey:       apiKey,
 		apiKeySecret: apiKeySecret,
+		body:         nil,
 		epoch:        time.Now().Unix(),
 		method:       req.Method,
 		nonce:        nonce(recommendedNonceLen),
 		uri:          req.URL.Path,
+		hashCache:    "",
 	}
 
 	if req.GetBody == nil {
