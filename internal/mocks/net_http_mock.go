@@ -72,7 +72,7 @@ type RoundTripper_RoundTrip_Call struct {
 
 // RoundTrip is a helper method to define mock.On call
 //   - request *http.Request
-func (_e *RoundTripper_Expecter) RoundTrip(request interface{}) *RoundTripper_RoundTrip_Call {
+func (_e *RoundTripper_Expecter) RoundTrip(request any) *RoundTripper_RoundTrip_Call {
 	return &RoundTripper_RoundTrip_Call{Call: _e.mock.On("RoundTrip", request)}
 }
 

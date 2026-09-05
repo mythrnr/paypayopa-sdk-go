@@ -112,7 +112,7 @@ type ReadCloser_Read_Call struct {
 
 // Read is a helper method to define mock.On call
 //   - p []byte
-func (_e *ReadCloser_Expecter) Read(p interface{}) *ReadCloser_Read_Call {
+func (_e *ReadCloser_Expecter) Read(p any) *ReadCloser_Read_Call {
 	return &ReadCloser_Read_Call{Call: _e.mock.On("Read", p)}
 }
 
