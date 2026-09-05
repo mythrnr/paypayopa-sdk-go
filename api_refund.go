@@ -31,7 +31,7 @@ func refundPayment(
 ) (*RefundResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &RefundResponse{}
+	res := new(RefundResponse)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/refunds",
@@ -53,7 +53,7 @@ func getRefundDetails(
 ) (*RefundResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &RefundResponse{}
+	res := new(RefundResponse)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/refunds/"+merchantRefundID,

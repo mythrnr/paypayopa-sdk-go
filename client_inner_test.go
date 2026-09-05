@@ -49,7 +49,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{},
+			new(http.Client),
 		)
 
 		assert.Equal(t, timeout, client.http.Timeout)
@@ -68,7 +68,7 @@ func Test_newClientWithHTTPClient(t *testing.T) {
 	})
 
 	assert.PanicsWithValue(t, "*Credentials must not be nil", func() {
-		newClientWithHTTPClient(nil, &http.Client{})
+		newClientWithHTTPClient(nil, new(http.Client))
 	})
 }
 
@@ -85,11 +85,11 @@ func Test_opaClient_Request(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{},
+			new(http.Client),
 		)
 
 		expected := errors.New("marshal error")
-		marshaler := &mocks.Marshaler{}
+		marshaler := new(mocks.Marshaler)
 		marshaler.On("MarshalJSON").Return(nil, expected)
 
 		req, err := client.Request(
@@ -113,7 +113,7 @@ func Test_opaClient_Request(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{},
+			new(http.Client),
 		)
 
 		req, err := client.Request(
@@ -123,7 +123,7 @@ func Test_opaClient_Request(t *testing.T) {
 			map[string]any{},
 		)
 
-		actual := &url.Error{}
+		actual := new(url.Error)
 
 		assert.Nil(t, req)
 		assert.ErrorAs(t, err, &actual)
@@ -139,7 +139,7 @@ func Test_opaClient_Request(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{},
+			new(http.Client),
 		)
 
 		req, err := client.Request(
@@ -160,7 +160,7 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("Timeout", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, context.DeadlineExceeded)
 
@@ -171,7 +171,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -192,7 +192,7 @@ func Test_opaClient_Do(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("unknown error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -203,7 +203,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -224,20 +224,14 @@ func Test_opaClient_Do(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("read error")
-		reader := &mocks.ReadCloser{}
+		reader := new(mocks.ReadCloser)
 		reader.
 			On("Read", mock.Anything).
 			Return(0, expected).
 			On("Close").
 			Return(nil)
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusAccepted),
-				StatusCode: http.StatusAccepted,
-				Body:       reader,
-			}, nil)
+		rt := newTestRoundTripperWithBody(http.StatusAccepted, reader)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -246,7 +240,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -266,13 +260,7 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("Failed to unmarshal body", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusAccepted),
-				StatusCode: http.StatusAccepted,
-				Body:       io.NopCloser(bytes.NewBufferString(`invalid-json`)),
-			}, nil)
+		rt := newTestRoundTripper(http.StatusAccepted, `invalid-json`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -281,7 +269,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -293,7 +281,7 @@ func Test_opaClient_Do(t *testing.T) {
 
 		res := map[string]any{}
 		info, err := client.Do(req, res)
-		actual := &json.SyntaxError{}
+		actual := new(json.SyntaxError)
 
 		assert.Nil(t, info)
 		assert.ErrorAs(t, err, &actual)
@@ -302,19 +290,13 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("response.data is empty", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
 						"codeId": "success-code-id"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -323,7 +305,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -349,12 +331,7 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("target to bind is nil", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -363,8 +340,7 @@ func Test_opaClient_Do(t *testing.T) {
 					"data": {
 						"key": "value"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -373,7 +349,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -398,12 +374,7 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("Failed to unmarshal response.data", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -412,8 +383,7 @@ func Test_opaClient_Do(t *testing.T) {
 					"data": {
 						"key": "value"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -422,7 +392,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -432,12 +402,12 @@ func Test_opaClient_Do(t *testing.T) {
 			nil,
 		)
 
-		res := struct {
+		var res struct {
 			Key int `json:"key"`
-		}{}
+		}
 
 		info, err := client.Do(req, &res)
-		actual := &json.UnmarshalTypeError{}
+		actual := new(json.UnmarshalTypeError)
 
 		assert.Nil(t, info)
 		assert.ErrorAs(t, err, &actual)
@@ -446,12 +416,7 @@ func Test_opaClient_Do(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -460,8 +425,7 @@ func Test_opaClient_Do(t *testing.T) {
 					"data": {
 						"key": "value"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -470,7 +434,7 @@ func Test_opaClient_Do(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		req, _ := http.NewRequestWithContext(
@@ -480,9 +444,9 @@ func Test_opaClient_Do(t *testing.T) {
 			io.NopCloser(bytes.NewBufferString(`{ "test": "value" }`)),
 		)
 
-		res := struct {
+		var res struct {
 			Key string `json:"key"`
-		}{}
+		}
 
 		info, err := client.Do(req, &res)
 

@@ -40,7 +40,7 @@ const (
 	// sent to the production environment.
 	//
 	// EnvProduction は本番環境にリクエストを送ることを指定する値.
-	EnvProduction Environment = "https://api.paypay.ne.jp"
+	EnvProduction Environment = "https://apigw.paypay.ne.jp"
 
 	// EnvStaging is a value that specifies that the request should be
 	// sent to the staging environment.
@@ -52,7 +52,7 @@ const (
 	// sent to the sandbox environment.
 	//
 	// EnvSandbox はサンドボックス環境にリクエストを送ることを指定する値.
-	EnvSandbox Environment = "https://stg-api.sandbox.paypay.ne.jp"
+	EnvSandbox Environment = "https://apigw.sandbox.paypay.ne.jp"
 )
 
 // Lang is a value specified in the lang header to set

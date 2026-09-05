@@ -2,14 +2,13 @@
 version: "2"
 
 run:
-  go: "1.26"
+  go: "1.27"
 
 linters:
   default: "all"
   disable:
     - "depguard"
     - "embeddedstructfieldcheck"
-    - "exhaustruct"
     - "goconst"
     - "noinlineerr"
     - "tagliatelle"
@@ -17,6 +16,7 @@ linters:
     - "wrapcheck"
     - "wsl_v5"
     # deprecated linters
+    - "exhaustruct"
     - "gomodguard"
     - "wsl"
   settings:

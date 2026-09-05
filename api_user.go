@@ -29,7 +29,7 @@ func createAccountLinkQRCode(
 ) (*CreateAccountLinkQRCodeResponse, *ResultInfo, error) {
 	const timeout = 10 * time.Second
 
-	res := &CreateAccountLinkQRCodeResponse{}
+	res := new(CreateAccountLinkQRCodeResponse)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/qr/sessions",
@@ -60,7 +60,7 @@ func getUserAuthorizationStatus(
 ) (*GetUserAuthorizationStatusResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &GetUserAuthorizationStatusResponse{}
+	res := new(GetUserAuthorizationStatusResponse)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/user/authorizations?"+url.Values{
@@ -100,7 +100,7 @@ func getMaskedUserProfile(
 ) (*GetMaskedUserProfileResponse, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &GetMaskedUserProfileResponse{}
+	res := new(GetMaskedUserProfileResponse)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/user/profile/secure?"+url.Values{

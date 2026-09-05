@@ -31,7 +31,7 @@ func createPayment(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments?agreeSimilarTransaction="+
@@ -67,7 +67,7 @@ func getPaymentDetails(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/"+merchantPaymentID,
@@ -114,7 +114,7 @@ func createContinuousPayment(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/subscription/payments",
@@ -154,7 +154,7 @@ func consultExpectedCashbackInfo(
 		rq.Header.Set(headerNameLang, string(req.Lang))
 	}
 
-	res := &CashbackInfoResponse{}
+	res := new(CashbackInfoResponse)
 	info, err := client.Do(rq, res)
 
 	if err != nil || !info.Success() {

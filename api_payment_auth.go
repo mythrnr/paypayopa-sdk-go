@@ -30,7 +30,7 @@ func createPaymentAuthorization(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/preauthorize?agreeSimilarTransaction="+
@@ -61,7 +61,7 @@ func capturePaymentAuthorization(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/capture",
@@ -100,7 +100,7 @@ func revertPaymentAuthorization(
 ) (*RevertedPaymentResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &RevertedPaymentResponse{}
+	res := new(RevertedPaymentResponse)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/payments/preauthorize/revert",

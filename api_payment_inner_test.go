@@ -1,10 +1,8 @@
 package paypayopa
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"testing"
 
@@ -20,12 +18,7 @@ func Test_createPayment(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -76,8 +69,7 @@ func Test_createPayment(t *testing.T) {
 						],
 						"metadata": {}
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -86,11 +78,11 @@ func Test_createPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
+		pay, info, err := createPayment(ctx, client, new(CreatePaymentPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -109,19 +101,13 @@ func Test_createPayment(t *testing.T) {
 	t.Run("Invalid request params", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "INVALID_REQUEST_PARAMS",
 						"message": "Invalid request params",
 						"codeId": "08100006"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -130,11 +116,11 @@ func Test_createPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
+		pay, info, err := createPayment(ctx, client, new(CreatePaymentPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -153,7 +139,7 @@ func Test_createPayment(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -164,11 +150,11 @@ func Test_createPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
-		pay, info, err := createPayment(ctx, client, &CreatePaymentPayload{})
+		pay, info, err := createPayment(ctx, client, new(CreatePaymentPayload))
 
 		t.Log(pay, info, err)
 		require.ErrorIs(t, err, expected)
@@ -183,19 +169,13 @@ func Test_cancelPayment(t *testing.T) {
 	t.Run("Accepted", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusAccepted),
-				StatusCode: http.StatusAccepted,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusAccepted, `{
 					"resultInfo": {
 						"code": "REQUEST_ACCEPTED",
 						"message": "Request accepted",
 						"codeId": "08100001"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -204,7 +184,7 @@ func Test_cancelPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -224,19 +204,13 @@ func Test_cancelPayment(t *testing.T) {
 	t.Run("Order cannot be reversed", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "ORDER_NOT_REVERSIBLE",
 						"message": "Order cannot be reversed",
 						"codeId": "00200044"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -245,7 +219,7 @@ func Test_cancelPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -266,7 +240,7 @@ func Test_cancelPayment(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -277,7 +251,7 @@ func Test_cancelPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -295,12 +269,7 @@ func Test_getPaymentDetails(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -351,8 +320,7 @@ func Test_getPaymentDetails(t *testing.T) {
 						],
 						"metadata": {}
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -361,7 +329,7 @@ func Test_getPaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -384,19 +352,13 @@ func Test_getPaymentDetails(t *testing.T) {
 	t.Run("Dynamic QR payment not found", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "DYNAMIC_QR_PAYMENT_NOT_FOUND",
 						"message": "Dynamic QR payment not found",
 						"codeId": "01652075"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -405,7 +367,7 @@ func Test_getPaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -428,7 +390,7 @@ func Test_getPaymentDetails(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -439,7 +401,7 @@ func Test_getPaymentDetails(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
@@ -458,12 +420,7 @@ func Test_createContinuousPayment(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -514,8 +471,7 @@ func Test_createContinuousPayment(t *testing.T) {
 						],
 						"metadata": {}
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -524,13 +480,13 @@ func Test_createContinuousPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createContinuousPayment(
 			ctx, client,
-			&CreateContinuousPaymentPayload{})
+			new(CreateContinuousPaymentPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -549,19 +505,13 @@ func Test_createContinuousPayment(t *testing.T) {
 	t.Run("Request order not found", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "REQUEST_ORDER_NOT_FOUND",
 						"message": "Request order not found",
 						"codeId": "08300005"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -570,13 +520,13 @@ func Test_createContinuousPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createContinuousPayment(
 			ctx, client,
-			&CreateContinuousPaymentPayload{})
+			new(CreateContinuousPaymentPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -595,7 +545,7 @@ func Test_createContinuousPayment(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -606,13 +556,13 @@ func Test_createContinuousPayment(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createContinuousPayment(
 			ctx, client,
-			&CreateContinuousPaymentPayload{})
+			new(CreateContinuousPaymentPayload))
 
 		t.Log(pay, info, err)
 		require.ErrorIs(t, err, expected)
@@ -627,23 +577,20 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				//nolint:gosmopolitan
-				Body: io.NopCloser(bytes.NewBufferString(`{
-					"resultInfo": {
-						"code": "SUCCESS",
-						"message": "Success",
-						"codeId": "08100001"
-					},
-					"data": {
-						"campaignMessage": "100円相当戻ってくる！"
-					}
-				}`)),
-			}, nil)
+		rt := newTestRoundTripper(
+			http.StatusOK,
+			//nolint:gosmopolitan
+			`{
+				"resultInfo": {
+					"code": "SUCCESS",
+					"message": "Success",
+					"codeId": "08100001"
+				},
+				"data": {
+					"campaignMessage": "100円相当戻ってくる！"
+				}
+			}`,
+		)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -652,13 +599,13 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		cashback, info, err := consultExpectedCashbackInfo(
 			ctx, client,
-			&ConsultExpectedCashbackInfoPayload{})
+			new(ConsultExpectedCashbackInfoPayload))
 
 		t.Log(cashback, info, err)
 		require.NoError(t, err)
@@ -678,26 +625,19 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 	t.Run("Success (EN)", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Run(func(args mock.Arguments) {
-				req, _ := args[0].(*http.Request)
-				assert.Equal(t, "EN", req.Header.Get(headerNameLang))
-			}).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
-					"resultInfo": {
-						"code": "SUCCESS",
-						"message": "Success",
-						"codeId": "08100001"
-					},
-					"data": {
-						"campaignMessage": "Get 100 Yen cashback"
-					}
-				}`)),
-			}, nil)
+		rt := newTestRoundTripper(http.StatusOK, `{
+				"resultInfo": {
+					"code": "SUCCESS",
+					"message": "Success",
+					"codeId": "08100001"
+				},
+				"data": {
+					"campaignMessage": "Get 100 Yen cashback"
+				}
+			}`, func(args mock.Arguments) {
+			req, _ := args[0].(*http.Request)
+			assert.Equal(t, "EN", req.Header.Get(headerNameLang))
+		})
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -706,13 +646,14 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
+		req := new(ConsultExpectedCashbackInfoPayload)
+		req.Lang = LangEN
+
 		ctx := context.Background()
-		cashback, info, err := consultExpectedCashbackInfo(
-			ctx, client,
-			&ConsultExpectedCashbackInfoPayload{Lang: LangEN})
+		cashback, info, err := consultExpectedCashbackInfo(ctx, client, req)
 
 		t.Log(cashback, info, err)
 		require.NoError(t, err)
@@ -731,19 +672,13 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 	t.Run("Something went wrong on PayPay service side", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusInternalServerError),
-				StatusCode: http.StatusInternalServerError,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusInternalServerError, `{
 					"resultInfo": {
 						"code": "INTERNAL_SERVER_ERROR",
 						"message": "Something went wrong on PayPay service side",
 						"codeId": "08101000"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -752,13 +687,13 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		cashback, info, err := consultExpectedCashbackInfo(
 			ctx, client,
-			&ConsultExpectedCashbackInfoPayload{})
+			new(ConsultExpectedCashbackInfoPayload))
 
 		t.Log(cashback, info, err)
 		require.NoError(t, err)
@@ -777,7 +712,7 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -788,13 +723,13 @@ func Test_consultExpectedCashbackInfo(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		cashback, info, err := consultExpectedCashbackInfo(
 			ctx, client,
-			&ConsultExpectedCashbackInfoPayload{})
+			new(ConsultExpectedCashbackInfoPayload))
 
 		t.Log(cashback, info, err)
 		require.ErrorIs(t, err, expected)

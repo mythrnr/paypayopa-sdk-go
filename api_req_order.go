@@ -41,7 +41,7 @@ func createPendingPayment(
 ) (*PendingPayment, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &PendingPayment{}
+	res := new(PendingPayment)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/requestOrder",
@@ -76,7 +76,7 @@ func getRequestedPaymentDetails(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v1/requestOrder/"+merchantPaymentID,

@@ -1,10 +1,8 @@
 package paypayopa
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"io"
 	"net/http"
 	"testing"
 
@@ -20,12 +18,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -99,8 +92,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 						],
 						"metadata": {}
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -109,13 +101,13 @@ func Test_createPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createPaymentAuthorization(
 			ctx, client,
-			&CreatePaymentAuthorizationPayload{})
+			new(CreatePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -134,19 +126,13 @@ func Test_createPaymentAuthorization(t *testing.T) {
 	t.Run("Invalid parameters received", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "INVALID_PARAMS",
 						"message": "Invalid parameters received",
 						"codeId": "00200004"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -155,13 +141,13 @@ func Test_createPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createPaymentAuthorization(
 			ctx, client,
-			&CreatePaymentAuthorizationPayload{})
+			new(CreatePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -180,7 +166,7 @@ func Test_createPaymentAuthorization(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -191,13 +177,13 @@ func Test_createPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := createPaymentAuthorization(
 			ctx, client,
-			&CreatePaymentAuthorizationPayload{})
+			new(CreatePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.ErrorIs(t, err, expected)
@@ -212,12 +198,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -285,8 +266,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 						"metadata": {},
 						"assumeMerchant": "string"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -295,13 +275,13 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := capturePaymentAuthorization(
 			ctx, client,
-			&CapturePaymentAuthorizationPayload{})
+			new(CapturePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -320,20 +300,17 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 	t.Run("User confirmation required", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusAccepted),
-				StatusCode: http.StatusAccepted,
-				//nolint:lll
-				Body: io.NopCloser(bytes.NewBufferString(`{
-					"resultInfo": {
-						"code": "USER_CONFIRMATION_REQUIRED",
-						"message": "User confirmation required as requested amount is above allowed limit",
-						"codeId": "08300103"
-					}
-				}`)),
-			}, nil)
+		rt := newTestRoundTripper(
+			http.StatusAccepted,
+			//nolint:lll
+			`{
+				"resultInfo": {
+					"code": "USER_CONFIRMATION_REQUIRED",
+					"message": "User confirmation required as requested amount is above allowed limit",
+					"codeId": "08300103"
+				}
+			}`,
+		)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -342,13 +319,13 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := capturePaymentAuthorization(
 			ctx, client,
-			&CapturePaymentAuthorizationPayload{})
+			new(CapturePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -367,19 +344,13 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 	t.Run("Cannot capture already captured acquiring order", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "ALREADY_CAPTURED",
 						"message": "Cannot capture already captured acquiring order",
 						"codeId": "00200039"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -388,13 +359,13 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := capturePaymentAuthorization(
 			ctx, client,
-			&CapturePaymentAuthorizationPayload{})
+			new(CapturePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -413,7 +384,7 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -424,13 +395,13 @@ func Test_capturePaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := capturePaymentAuthorization(
 			ctx, client,
-			&CapturePaymentAuthorizationPayload{})
+			new(CapturePaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.ErrorIs(t, err, expected)
@@ -445,12 +416,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 	t.Run("Success", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusOK),
-				StatusCode: http.StatusOK,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusOK, `{
 					"resultInfo": {
 						"code": "SUCCESS",
 						"message": "Success",
@@ -463,8 +429,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 						"requestedAt": 0,
 						"reason": "string"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -473,13 +438,13 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := revertPaymentAuthorization(
 			ctx, client,
-			&RevertPaymentAuthorizationPayload{})
+			new(RevertPaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -498,19 +463,13 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 	t.Run("Order is not cancelable", func(t *testing.T) {
 		t.Parallel()
 
-		rt := &mocks.RoundTripper{}
-		rt.On("RoundTrip", mock.Anything).
-			Return(&http.Response{
-				Status:     http.StatusText(http.StatusBadRequest),
-				StatusCode: http.StatusBadRequest,
-				Body: io.NopCloser(bytes.NewBufferString(`{
+		rt := newTestRoundTripper(http.StatusBadRequest, `{
 					"resultInfo": {
 						"code": "ORDER_NOT_CANCELABLE",
 						"message": "Order is not cancelable",
 						"codeId": "00200042"
 					}
-				}`)),
-			}, nil)
+				}`)
 
 		client := newClientWithHTTPClient(
 			NewCredentials(
@@ -519,13 +478,13 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := revertPaymentAuthorization(
 			ctx, client,
-			&RevertPaymentAuthorizationPayload{})
+			new(RevertPaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.NoError(t, err)
@@ -544,7 +503,7 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 		t.Parallel()
 
 		expected := errors.New("RoundTrip error")
-		rt := &mocks.RoundTripper{}
+		rt := new(mocks.RoundTripper)
 		rt.On("RoundTrip", mock.Anything).
 			Return(nil, expected)
 
@@ -555,13 +514,13 @@ func Test_revertPaymentAuthorization(t *testing.T) {
 				"API_KEY_SECRET",
 				"MERCHANT_ID",
 			),
-			&http.Client{Transport: rt},
+			newTestClient(rt),
 		)
 
 		ctx := context.Background()
 		pay, info, err := revertPaymentAuthorization(
 			ctx, client,
-			&RevertPaymentAuthorizationPayload{})
+			new(RevertPaymentAuthorizationPayload))
 
 		t.Log(pay, info, err)
 		require.ErrorIs(t, err, expected)

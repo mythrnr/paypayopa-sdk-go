@@ -35,7 +35,7 @@ func decodeAuthorizationResponseToken(
 	creds *Credentials,
 	token string,
 ) (*AuthorizationResponseToken, error) {
-	claims := rawToken{}
+	var claims rawToken
 
 	if _, err := jwt.ParseWithClaims(
 		token, &claims,

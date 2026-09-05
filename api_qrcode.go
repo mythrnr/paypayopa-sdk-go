@@ -60,7 +60,7 @@ func createQRCode(
 ) (*QRCodeResponse, *ResultInfo, error) {
 	const timeout = 30 * time.Second
 
-	res := &QRCodeResponse{}
+	res := new(QRCodeResponse)
 	info, err := client.POST(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/codes",
@@ -95,7 +95,7 @@ func getCodePaymentDetails(
 ) (*Payment, *ResultInfo, error) {
 	const timeout = 15 * time.Second
 
-	res := &Payment{}
+	res := new(Payment)
 	info, err := client.GET(
 		ctxWithTimeout(ctx, timeout),
 		"/v2/codes/payments/"+merchantPaymentID,
